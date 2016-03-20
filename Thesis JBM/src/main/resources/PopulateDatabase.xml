@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- 
- * PopulateDatabase.xml
- *
- * Copyright (C) 2014 Universidad de Sevilla
- * 
- * The use of this project is hereby constrained to the conditions of the 
- * TDG Licence, a copy of which you may download from 
- * http://www.tdg-seville.info/License.html
- -->
+<!-- * PopulateDatabase.xml * * Copyright (C) 2014 Universidad de Sevilla 
+	* * The use of this project is hereby constrained to the conditions of the 
+	* TDG Licence, a copy of which you may download from * http://www.tdg-seville.info/License.html -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	">
-	
+
 	<!-- User accounts -->
 
 	<bean id="userAccount1" class="security.UserAccount">
@@ -56,7 +50,87 @@
 			</list>
 		</property>
 	</bean>
+
+	<!-- Other domain beans come here -->
+
+	<bean id="metadata1" class="domain.Metadata">
+		<property name="name" value="Metadata1" />
+		<property name="questions">
+			<list>
+				<ref bean="question1" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="metadata2" class="domain.Metadata">
+		<property name="name" value="Metadata2" />
+		<property name="questions">
+			<list>
+				<ref bean="question1" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="question1" class="domain.Question">
+		<property name="name" value="Question1" />
+		<property name="text" value="QuestionText1" />
+		<property name="difficulty" value="8.4" />
+		<property name="xml" value="test" />
+		<property name="weight" value="1.0" />
+		<property name="exams">
+			<list>
+				<ref bean="exam1" />
+			</list>
+		</property>
+		<property name="metadata">
+			<list>
+				<ref bean="metadata1" />
+				<ref bean="metadata2" />
+			</list>
+		</property>
+		<property name="answers">
+			<list>
+				<ref bean="answer1" />
+				<ref bean="answer2" />
+			</list>
+		</property>
+		<property name="statistic" ref="statistic1" />
+	</bean>
+
+	<bean id="statistic1" class="domain.Statistic">
+		<property name="percentage" value="8.4" />
+		<property name="question" ref="question1" />
+	</bean>
 	
-	<!-- Other domain beans come here -->	
-	
+		<bean id="answer1" class="domain.Answer">
+		<property name="name" value="Answer1" />
+		<property name="isCorrect" value="true" />
+		<property name="text" value="AnswerText1" />
+		<property name="penalty" value="0.25" />
+		<property name="question" ref="question1" />
+	</bean>
+
+	<bean id="answer2" class="domain.Answer">
+		<property name="name" value="Answer2" />
+		<property name="isCorrect" value="true" />
+		<property name="text" value="AnswerText2" />
+		<property name="penalty" value="0.25" />
+		<property name="question" ref="question1" />
+	</bean>
+
+	<bean id="exam1" class="domain.Exam">
+		<property name="name" value="Exam1" />
+		<property name="date" value="20/03/2016" />
+		<property name="difficulty" value="8.4" />
+		<property name="xml" value="test" />
+		<property name="metadata" value="Metadata1,Metadata2" />
+		<property name="questions">
+			<list>
+				<ref bean="question1" />
+			</list>
+		</property>
+	</bean>
+
+
+
 </beans>
