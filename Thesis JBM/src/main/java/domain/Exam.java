@@ -23,16 +23,15 @@ public class Exam extends DomainEntity {
 
 	private String name;
 	private Date date;
-	private String metadata;
 	private String difficulty;
 	private String xml;
-	
-	//Relationship
-	private Collection<Question> questions;
+
+	// Relationship
+	private Collection<Exercise> exercises;
 
 	public Exam() {
 		super();
-		questions = new ArrayList<Question>();
+		exercises = new ArrayList<Exercise>();
 	}
 
 	@Valid
@@ -53,16 +52,6 @@ public class Exam extends DomainEntity {
 
 	public void setDate(Date date) {
 		this.date = date;
-	}
-
-	@Valid
-	@NotNull
-	public String getMetadata() {
-		return metadata;
-	}
-
-	public void setMetadata(String metadata) {
-		this.metadata = metadata;
 	}
 
 	@Valid
@@ -88,15 +77,12 @@ public class Exam extends DomainEntity {
 	@Valid
 	@NotNull
 	@ManyToMany
-	public Collection<Question> getQuestions() {
-		return questions;
+	public Collection<Exercise> getExercises() {
+		return exercises;
 	}
 
-	public void setQuestions(Collection<Question> questions) {
-		this.questions = questions;
+	public void setExercises(Collection<Exercise> exercises) {
+		this.exercises = exercises;
 	}
-	
-	
-	
-	
+
 }

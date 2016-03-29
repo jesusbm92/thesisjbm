@@ -8,7 +8,6 @@ import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.Valid;
@@ -25,16 +24,17 @@ public class Question extends DomainEntity {
 	private String xml;
 	private String difficulty;
 	private Double weight;
+	private Double weightfail;
 
 	// Relationship
-	private Collection<Exam> exams;
+	private Collection<Exercise> exercises;
 	private Statistic statistic;
 	private Collection<Metadata> metadata;
 	private Collection<Answer> answers;
 
 	public Question() {
 		super();
-		exams = new ArrayList<Exam>();
+		exercises = new ArrayList<Exercise>();
 		metadata = new ArrayList<Metadata>();
 		answers = new ArrayList<Answer>();
 
@@ -93,13 +93,14 @@ public class Question extends DomainEntity {
 	@Valid
 	@NotNull
 	@ManyToMany(mappedBy = "questions")
-	public Collection<Exam> getExams() {
-		return exams;
+	public Collection<Exercise> getExercises() {
+		return exercises;
 	}
-
-	public void setExams(Collection<Exam> exams) {
-		this.exams = exams;
+	
+	public void setExercises(Collection<Exercise> exercises) {
+		this.exercises = exercises;
 	}
+	
 
 	@Valid
 	@NotNull
@@ -108,8 +109,18 @@ public class Question extends DomainEntity {
 		return statistic;
 	}
 
+
 	public void setStatistic(Statistic statistic) {
 		this.statistic = statistic;
+	}
+	
+	@Valid
+	public Double getWeightfail() {
+		return weightfail;
+	}
+	
+	public void setWeightfail(Double weightfail) {
+		this.weightfail = weightfail;
 	}
 
 	@Valid
