@@ -2,6 +2,7 @@ package domain;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
@@ -48,6 +49,7 @@ public class Answer extends DomainEntity{
 
 	@Valid
 	@NotBlank
+	@Column(length = 50000)
 	public String getText() {
 		return text;
 	}

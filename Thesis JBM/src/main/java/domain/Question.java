@@ -6,6 +6,7 @@ import java.util.Collection;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -52,6 +53,7 @@ public class Question extends DomainEntity {
 
 	@Valid
 	@NotBlank
+	@Column(length = 50000)
 	public String getText() {
 		return text;
 	}
@@ -96,11 +98,10 @@ public class Question extends DomainEntity {
 	public Collection<Exercise> getExercises() {
 		return exercises;
 	}
-	
+
 	public void setExercises(Collection<Exercise> exercises) {
 		this.exercises = exercises;
 	}
-	
 
 	@Valid
 	@NotNull
@@ -109,16 +110,15 @@ public class Question extends DomainEntity {
 		return statistic;
 	}
 
-
 	public void setStatistic(Statistic statistic) {
 		this.statistic = statistic;
 	}
-	
+
 	@Valid
 	public Double getWeightfail() {
 		return weightfail;
 	}
-	
+
 	public void setWeightfail(Double weightfail) {
 		this.weightfail = weightfail;
 	}
@@ -136,7 +136,7 @@ public class Question extends DomainEntity {
 
 	@Valid
 	@NotNull
-	@OneToMany(mappedBy = "question")
+	@OneToMany(mappedBy = "question" ,cascade=CascadeType.PERSIST)
 	public Collection<Answer> getAnswers() {
 		return answers;
 	}

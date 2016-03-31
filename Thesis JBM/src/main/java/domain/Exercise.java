@@ -5,6 +5,8 @@ import java.util.Collection;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.validation.Valid;
@@ -43,6 +45,7 @@ public class Exercise extends DomainEntity{
 
 	@Valid
 	@NotBlank
+	@Column(length = 50000)
 	public String getText() {
 		return text;
 	}
@@ -64,7 +67,7 @@ public class Exercise extends DomainEntity{
 
 	@Valid
 	@NotNull
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.PERSIST)
 	public Collection<Question> getQuestions() {
 		return questions;
 	}

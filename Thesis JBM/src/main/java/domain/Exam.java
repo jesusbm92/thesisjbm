@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
@@ -76,7 +77,7 @@ public class Exam extends DomainEntity {
 
 	@Valid
 	@NotNull
-	@ManyToMany
+	@ManyToMany (cascade=CascadeType.PERSIST)
 	public Collection<Exercise> getExercises() {
 		return exercises;
 	}
