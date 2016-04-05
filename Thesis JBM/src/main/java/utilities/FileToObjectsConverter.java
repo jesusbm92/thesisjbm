@@ -2,8 +2,11 @@ package utilities;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +35,9 @@ public class FileToObjectsConverter {
 
 		BufferedReader br = null;
 
+		Properties prop = new Properties();
+		InputStream input = null;
+		
 		try {
 			System.out.printf("PopulateDatabase 1.3%n");
 			System.out.printf("--------------------%n%n");
@@ -45,19 +52,34 @@ public class FileToObjectsConverter {
 			databaseUtil.recreateDatabase();
 
 			String sCurrentLine;
+		
 
+			System.out.println("Accessing Properties File...");
+			
+			try {
+
+				input = FileToObjectsConverter.class.getClassLoader().getResourceAsStream("config.properties");
+
+				// load a properties file
+				prop.load(input);
+
+				
+
+			} catch (IOException ex) {
+				ex.printStackTrace();}
+			
 			Path file = Paths
-					.get("C:\\Documents and Settings\\Student\\testJun14\\testJun11pII.tst");
+					.get(prop.getProperty("pathToExam"));
 			BasicFileAttributes attr = Files.readAttributes(file,
 					BasicFileAttributes.class);
 			Date creation = new Date(attr.creationTime().toMillis());
 
 			br = new BufferedReader(
-					new FileReader(
-							"C:\\Documents and Settings\\Student\\testJun14\\testJun11pII.tst"));
+					new FileReader(prop.getProperty("pathToExam")));
 
 			Exam e = new Exam();
-			e.setName("ExamenPrueba");
+			e.setName(file.getFileName().toString().replace(".tst", ""));
+			System.out.println(e.getName());
 			while ((sCurrentLine = br.readLine()) != null) {
 				if (sCurrentLine.contains("EJERCICIO")
 						&& !sCurrentLine.contains("INCLUIR")) {
@@ -152,9 +174,8 @@ public class FileToObjectsConverter {
 										if (splitted[i].toLowerCase().equals(
 												"true")) {
 											a.setIsCorrect(true);
-										}
-										else if(splitted[i].toLowerCase().equals(
-												"false")){
+										} else if (splitted[i].toLowerCase()
+												.equals("false")) {
 											a.setIsCorrect(false);
 										}
 									} else if (i == 2) {
@@ -173,23 +194,102 @@ public class FileToObjectsConverter {
 
 						}
 					}
-					question.setAnswers(answers);
+					// question.setAnswers(answers);
+					// Statistic s = new Statistic();
+					// s.setPercentage(0.0);
+					// question.setStatistic(s);
+					// s.setQuestion(question);
+					// question.setDifficulty("");
+					// question.setXml("");
+					// e.setXml("");
+					// e.setDifficulty("");
+					// for (Answer a : answers) {
+					// a.setQuestion(question);
+					// }
+					//
+					// databaseUtil.openTransaction();
+					//
+					// databaseUtil.persist(question);
+					// databaseUtil.persist(s);
+					// for (Answer a : answers) {
+					// databaseUtil.persist(a);
+					// }
+					// databaseUtil.persist(e);
+					// databaseUtil.persist(exercise);
+					//
+					// databaseUtil.commitTransaction();
+
+					BufferedReader brStatistic = new BufferedReader(
+							new FileReader(prop.getProperty("pathToExam").replace(".tst", ".sts")));
+
+					
 					Statistic s = new Statistic();
-					s.setPercentage(0.0);
+					while ((sCurrentLine = brStatistic.readLine()) != null) {
+						// We reached percentages
+						if (sCurrentLine.contains("Valores porcentuales")) {
+							String copy = sCurrentLine;
+							String namecode = question.getName().substring(9);
+							//
+							
+							while (copy != null && sCurrentLine != null) {
+								// We have here the line of the question we are
+								// doing
+								// TODO
+								if (copy.length() > 3) {
+									copy = copy.replaceAll("\\s+", "")
+											.substring(0, 3);
+									if (copy.equals(namecode)) {
+										// We are in the line of the question
+										// now
+										String nospaces = sCurrentLine;
+										nospaces = nospaces.replaceAll("\\s+",
+												"");
+										nospaces = nospaces.replaceAll(
+												namecode, "");
+										// Now we separate the percentage using
+										// the . instead of substring(0,3) in
+										// case we have elements like 4.2
+										String[] percentsplit = nospaces
+												.split("\\.");
+										// We build the string for the
+										// percentage
+										String percentage = percentsplit[0]
+												+ "."
+												+ percentsplit[1].substring(0,
+														1);
+
+										s.setPercentage(new Double(percentage));
+										s.setQuestion(question);
+//										System.out.println(s.getPercentage());
+									}
+									
+									else if(s.getPercentage()==null && s.getQuestion()==null){
+										s.setPercentage(100.0);
+										s.setQuestion(question);
+									}
+
+								}
+
+								sCurrentLine = brStatistic.readLine();
+								// System.out.println(sCurrentLine);
+								copy = sCurrentLine;
+							}
+						}
+					}
+					
+					question.setAnswers(answers);
 					question.setStatistic(s);
-					s.setQuestion(question);
-					question.setDifficulty("");
+					question.setDifficulty(s.getPercentage().toString());
 					question.setXml("");
 					e.setXml("");
 					e.setDifficulty("");
 					for (Answer a : answers) {
 						a.setQuestion(question);
 					}
-
+					//DATABASE INSERT
 					databaseUtil.openTransaction();
 
 					databaseUtil.persist(question);
-					databaseUtil.persist(s);
 					for (Answer a : answers) {
 						databaseUtil.persist(a);
 					}
@@ -197,9 +297,12 @@ public class FileToObjectsConverter {
 					databaseUtil.persist(exercise);
 
 					databaseUtil.commitTransaction();
-
 				}
+				
+				
 			}
+			
+			
 
 		} catch (Throwable oops) {
 			System.out.flush();
@@ -208,6 +311,13 @@ public class FileToObjectsConverter {
 		} finally {
 			if (databaseUtil != null)
 				databaseUtil.close();
+			if (input != null)
+				try {
+					input.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			try {
 				if (br != null)
 					br.close();
