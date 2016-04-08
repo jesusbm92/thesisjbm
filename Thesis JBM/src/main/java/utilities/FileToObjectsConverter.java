@@ -94,8 +94,17 @@ public class FileToObjectsConverter {
 							sCurrentLine.indexOf("<") - 1));
 					// Next line for weight (For the question of that exercise)
 					sCurrentLine = br.readLine();
-					sCurrentLine = sCurrentLine.replaceAll("[^\\d.]", "");
-					Double currentWeight = Double.valueOf(sCurrentLine);
+//					sCurrentLine = sCurrentLine.replaceAll("[^\\d.]", "");
+					Double currentWeight = null;
+					while(currentWeight==null){
+						try{
+							sCurrentLine = sCurrentLine.replaceAll("[^\\d.]", "");
+							currentWeight=Double.valueOf(sCurrentLine);
+						}
+						catch(Exception ex){
+							sCurrentLine=br.readLine();
+						}
+					}
 					// Next line is ENUNCIADO (text)
 					sCurrentLine = br.readLine();
 					// Next start the text of the exercise:
