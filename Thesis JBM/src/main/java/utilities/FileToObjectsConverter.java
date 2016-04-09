@@ -334,7 +334,7 @@ public class FileToObjectsConverter {
 
 									else if (s.getPercentage() == null
 											&& s.getQuestion() == null) {
-										s.setPercentage(100.0);
+										s.setPercentage(-1.0);
 										s.setQuestion(question);
 									}
 
@@ -363,7 +363,20 @@ public class FileToObjectsConverter {
 							+ "</texto><respuestasUnica numColumnas=\"1\" numSoluciones=\"unica\" pesoRespCorrecta=\"2\" pesoRespIncorrecta=\""
 							+ question.getWeightfail() + "\">";
 
-					e.setDifficulty("");
+					//Dificulty of exam:
+					Double finalDif=0.0;
+					Integer count=0;
+					for(Exercise exer: e.getExercises()){
+						for(Question q: exer.getQuestions()){
+							if(q.getStatistic().getPercentage()>0.0){
+								count++;
+								finalDif=finalDif+q.getStatistic().getPercentage();
+							}
+						}
+					}
+					
+					finalDif=finalDif/count;
+					e.setDifficulty(String.valueOf(finalDif));
 					for (Answer a : answers) {
 						xmlToQuestion = xmlToQuestion
 								.concat("<respuesta correcta=\""
