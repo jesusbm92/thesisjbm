@@ -64,6 +64,7 @@ public class Question extends DomainEntity {
 
 	@Valid
 	@NotNull
+	@Column(length = 50000)
 	public String getXml() {
 		return xml;
 	}

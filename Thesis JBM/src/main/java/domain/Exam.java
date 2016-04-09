@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
@@ -67,6 +68,7 @@ public class Exam extends DomainEntity {
 
 	@Valid
 	@NotNull
+	@Column(length = 50000)
 	public String getXml() {
 		return xml;
 	}
