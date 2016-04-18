@@ -42,50 +42,12 @@ import domain.Question;
 import domain.Statistic;
 
 public class FileToObjectsConverter {
+
+//	public static String prettyFormat(String input) {
+//		
+//	}
+
 	
-	public static String prettyFormat(String input, int indent) {
-        try
-        {
-            Source xmlInput = new StreamSource(new StringReader(input));
-            StringWriter stringWriter = new StringWriter();
-            StreamResult xmlOutput = new StreamResult(stringWriter);
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            // This statement works with JDK 6
-            transformerFactory.setAttribute("indent-number", indent);
-             
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.transform(xmlInput, xmlOutput);
-            return xmlOutput.getWriter().toString();
-        }
-        catch (Throwable e)
-        {
-            // You'll come here if you are using JDK 1.5
-            // you are getting an the following exeption
-            // java.lang.IllegalArgumentException: Not supported: indent-number
-            // Use this code (Set the output property in transformer.
-            try
-            {
-                Source xmlInput = new StreamSource(new StringReader(input));
-                StringWriter stringWriter = new StringWriter();
-                StreamResult xmlOutput = new StreamResult(stringWriter);
-                TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                Transformer transformer = transformerFactory.newTransformer();
-                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", String.valueOf(indent));
-                transformer.transform(xmlInput, xmlOutput);
-                return xmlOutput.getWriter().toString();
-            }
-            catch(Throwable t)
-            {
-                return input;
-            }
-        }
-    }
- 
-    public static String prettyFormat(String input) {
-        return prettyFormat(input, 2);
-    }
 
 	public static void main(String[] args) {
 		DatabaseUtil databaseUtil;
@@ -138,9 +100,9 @@ public class FileToObjectsConverter {
 			e.setName(file.getFileName().toString().replace(".tst", ""));
 			e.setDate(creation);
 			System.out.println(e.getName());
-			String xmlToExam = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><p:examen barajaEjercicios=\"false\" barajaPreguntas=\"false\" barajaRespuestas=\"true\" numEnunciados=\"9\" ordenEjercicios=\"10,3,5,ej1,2,4,6,7,8,9\" tipoNumeracionEjercicios=\"ordinal_literal\" tipoNumeracionPreguntas=\"decimal\" tipoNumeracionRespuestas=\"caracteres_minusculas\" xmlns:p=\"barajador_examen.modelo.jaxb.modeloexamen\" xmlns:xsi=\"ht//www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"barajador_examen.modelo.jaxb.modeloexamen modeloExamen.xsd \"> <cabecera> <infoUniversidad> <nombre>Universidad Politécnica de Madrid</nombre> <siglas>UPM</siglas> </infoUniversidad> <infoFacultad> <nombre>Escuela Técnica Superior de Ingenieros Informáticos</nombre> <siglas>ETSIINF</siglas> </infoFacultad> <infoDepartamento> <nombre>Departamento de Lenguajes y Sistemas Informáticos e Ingeniería del Software</nombre> <siglas>DLSIIS</siglas> </infoDepartamento> <infoAsignatura> <nombre>Programación II</nombre> <tipo>Troncal</tipo> </infoAsignatura> <tipoExamen>Itinerario Flexible</tipoExamen> <fechaExamen> <fechaSeparadores tipo=\"separadores\">"
+			String xmlToExam = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<p:examen barajaEjercicios=\"false\" barajaPreguntas=\"false\" barajaRespuestas=\"true\" numEnunciados=\"9\" ordenEjercicios=\"10,3,5,ej1,2,4,6,7,8,9\" tipoNumeracionEjercicios=\"ordinal_literal\" tipoNumeracionPreguntas=\"decimal\" tipoNumeracionRespuestas=\"caracteres_minusculas\" xmlns:p=\"barajador_examen.modelo.jaxb.modeloexamen\" xmlns:xsi=\"ht//www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"barajador_examen.modelo.jaxb.modeloexamen modeloExamen.xsd \">\n <cabecera>\n <infoUniversidad>\n <nombre>Universidad Politécnica de Madrid</nombre>\n <siglas>UPM</siglas>\n </infoUniversidad>\n <infoFacultad>\n <nombre>Escuela Técnica Superior de Ingenieros Informáticos</nombre>\n <siglas>ETSIINF</siglas>\n </infoFacultad>\n <infoDepartamento>\n <nombre>Departamento de Lenguajes y Sistemas Informáticos e Ingeniería del Software</nombre>\n <siglas>DLSIIS</siglas>\n </infoDepartamento>\n <infoAsignatura>\n <nombre>Programación II</nombre>\n <tipo>Troncal</tipo>\n </infoAsignatura>\n <tipoExamen>Itinerario Flexible</tipoExamen>\n <fechaExamen>\n <fechaSeparadores tipo=\"separadores\">\n"
 					+ e.getDate()
-					+ "</fechaSeparadores> </fechaExamen> <tituloExamen> <nombreUniversidad>false</nombreUniversidad> <nombreFacultad>false</nombreFacultad> <nombreDepartamento>true</nombreDepartamento> <siglasUniversidad>true</siglasUniversidad> <siglasFacultad>true</siglasFacultad> <siglasDepartamento>false</siglasDepartamento> </tituloExamen> <subtituloExamen> <nombreAsignatura>true</nombreAsignatura> <siglasAsignatura>false</siglasAsignatura> <tipoAsignatura>false</tipoAsignatura> <tipoExamen>true</tipoExamen> <fechaExamen>true</fechaExamen> </subtituloExamen> <textoCaratulaExamen> <prefacioDelExamen> <elemento nombreElemento=\"Realización\"><![CDATA[El test se realizará en la hoja de respuesta. Es \textbf{importante} que no olvidéis rellenar vuestros datos personales y el código clave de vuestro enunciado. Se pueden utilizar hojas aparte en sucio. ]]> </elemento> <elemento nombreElemento=\"Duración\"> </elemento> <elemento nombreElemento=\"Puntuación\"> </elemento> <elemento nombreElemento=\"Calificaciones\"> </elemento> <elemento nombreElemento=\"Revisión\"> </elemento> </prefacioDelExamen> </textoCaratulaExamen> </cabecera> <ejercicios>";
+					+ "</fechaSeparadores>\n </fechaExamen>\n <tituloExamen>\n <nombreUniversidad>false</nombreUniversidad>\n <nombreFacultad>false</nombreFacultad>\n <nombreDepartamento>true</nombreDepartamento>\n <siglasUniversidad>true</siglasUniversidad>\n <siglasFacultad>true</siglasFacultad>\n <siglasDepartamento>false</siglasDepartamento>\n </tituloExamen>\n <subtituloExamen>\n <nombreAsignatura>true</nombreAsignatura>\n <siglasAsignatura>false</siglasAsignatura>\n <tipoAsignatura>false</tipoAsignatura>\n<tipoExamen>true</tipoExamen>\n <fechaExamen>true</fechaExamen>\n </subtituloExamen>\n <textoCaratulaExamen>\n <prefacioDelExamen>\n <elemento nombreElemento=\"Realización\">\n<![CDATA[El test se realizará en la hoja de respuesta. Es \textbf{importante} que no olvidéis rellenar vuestros datos personales y el código clave de vuestro enunciado. Se pueden utilizar hojas aparte en sucio. ]]>\n </elemento>\n <elemento nombreElemento=\"Duración\"> </elemento>\n <elemento nombreElemento=\"Puntuación\"> </elemento>\n <elemento nombreElemento=\"Calificaciones\"> </elemento>\n <elemento nombreElemento=\"Revisión\"> </elemento>\n </prefacioDelExamen>\n </textoCaratulaExamen>\n </cabecera> \n<ejercicios>\n";
 			while ((sCurrentLine = br.readLine()) != null) {
 				if (sCurrentLine.contains("EJERCICIO")
 						&& !sCurrentLine.contains("INCLUIR")) {
@@ -196,7 +158,9 @@ public class FileToObjectsConverter {
 							sCurrentLine.indexOf("<") - 1));
 
 					// Skipping the ENUNCIADO_TF line
-					sCurrentLine = br.readLine();
+						sCurrentLine = br.readLine();
+
+					
 					Boolean textQuestionFinish = false;
 					question.setWeight(currentWeight);
 					question.setText("");
@@ -351,50 +315,51 @@ public class FileToObjectsConverter {
 					question.setStatistic(s);
 					question.setDifficulty(s.getPercentage().toString());
 					xmlToExam = xmlToExam.concat("<ejercicio etiqueta=\""
-							+ exercise.getName() + "\"> <enunciado><![CDATA["
+							+ exercise.getName() + "\"> <enunciado>\n<![CDATA["
 							+ exercise.getText()
-							+ "]]></enunciado> <preguntas>");
+							+ "]]></enunciado>\n <preguntas>\n");
 					String xmlToQuestion = " <pregunta peso=\""
 							+ question.getWeight()
 							+ "\" codigo=\""
 							+ question.getName()
-							+ "\"> <texto>"
+							+ "\">\n <texto>"
 							+ question.getText()
-							+ "</texto><respuestasUnica numColumnas=\"1\" numSoluciones=\"unica\" pesoRespCorrecta=\"2\" pesoRespIncorrecta=\""
-							+ question.getWeightfail() + "\">";
+							+ "\n</texto>\n<respuestasUnica numColumnas=\"1\" numSoluciones=\"unica\" pesoRespCorrecta=\"2\" pesoRespIncorrecta=\""
+							+ question.getWeightfail() + "\">\n";
 
-					//Dificulty of exam:
-					Double finalDif=0.0;
-					Integer count=0;
-					for(Exercise exer: e.getExercises()){
-						for(Question q: exer.getQuestions()){
-							if(q.getStatistic().getPercentage()>0.0){
+					// Dificulty of exam:
+					Double finalDif = 0.0;
+					Integer count = 0;
+					for (Exercise exer : e.getExercises()) {
+						for (Question q : exer.getQuestions()) {
+							if (q.getStatistic().getPercentage() > 0.0) {
 								count++;
-								finalDif=finalDif+q.getStatistic().getPercentage();
+								finalDif = finalDif
+										+ q.getStatistic().getPercentage();
 							}
 						}
 					}
-					
-					finalDif=finalDif/count;
+
+					finalDif = finalDif / count;
 					e.setDifficulty(String.valueOf(finalDif));
 					for (Answer a : answers) {
 						xmlToQuestion = xmlToQuestion
 								.concat("<respuesta correcta=\""
-										+ a.getIsCorrect() + "\"><texto>"
-										+ a.getText() + "</texto></respuesta>");
+										+ a.getIsCorrect() + "\">\n<texto>"
+										+ a.getText() + "</texto>\n</respuesta>\n");
 						a.setQuestion(question);
 					}
 					// Concat XML endTags
 					xmlToQuestion = xmlToQuestion
-							.concat("</respuestasUnica></pregunta>");
+							.concat("</respuestasUnica>\n</pregunta>\n");
 
 					// Añadir comprobacion si es ultimo para añadir al final
 					// /ejercicios y /examen
 					xmlToExam = xmlToExam
 							.concat(xmlToQuestion
-									+ "</preguntas><metadatos></metadatos></ejercicio>");
+									+ "</preguntas>\n<metadatos></metadatos>\n</ejercicio>\n");
 
-					question.setXml(FileToObjectsConverter.prettyFormat(xmlToQuestion));
+					question.setXml(xmlToQuestion);
 
 					e.setXml(xmlToExam);
 					// DATABASE INSERT
@@ -412,8 +377,7 @@ public class FileToObjectsConverter {
 
 			}
 
-			e.setXml(e.getXml().concat(" </ejercicios></p:examen>"));
-			e.setXml(FileToObjectsConverter.prettyFormat(e.getXml()));
+			e.setXml(e.getXml().concat(" </ejercicios>\n</p:examen>"));
 			databaseUtil.openTransaction();
 			databaseUtil.persist(e);
 			databaseUtil.commitTransaction();

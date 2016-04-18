@@ -48,7 +48,7 @@ public class Answer extends DomainEntity{
 	}
 
 	@Valid
-	@NotBlank
+	@NotNull
 	@Column(length = 50000)
 	public String getText() {
 		return text;
