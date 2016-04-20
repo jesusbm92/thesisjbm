@@ -18,10 +18,8 @@
 	">
 
 	<util:list id="converters">
-		<!-- 
-			Add your own converters using entries of the following form: 
-			<bean class="converters.Class1ToClass2" /> 
-		-->
+		<bean class="converters.ExamToStringConverter" />
+		<bean class="converters.StringToExamConverter" />
 	</util:list>
 	
 </beans>

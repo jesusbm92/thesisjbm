@@ -113,13 +113,6 @@
 	<!-- Dependencies -->
 
 	<dependencies>
-
-		<dependency>
-			<groupId>com.jcabi</groupId>
-			<artifactId>jcabi-xml</artifactId>
-			<version>0.14</version>
-		</dependency>
-
 		<!-- Spring Framework -->
 
 		<dependency>
