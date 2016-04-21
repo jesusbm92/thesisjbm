@@ -16,17 +16,35 @@
 	<div class="row">
 		<div class="table-responsive">
 
-			<display:table uid="examsListTable" keepStatus="false"
-				name="exams" pagesize="10" class="table table-hover"
-				requestURI="${requestURI}" id="row">
+			<display:table uid="examsListTable" keepStatus="false" name="exams"
+				pagesize="10" class="table table-hover" requestURI="${requestURI}"
+				id="row">
 
 
-				<display:column property="name" titleKey="exam.name"
+				<display:column property="name" titleKey="exam.name" sortable="true" />
+				<display:column property="difficulty" titleKey="exam.difficulty"
 					sortable="true" />
+				<display:column property="date" titleKey="exam.date" sortable="true" />
+				<display:column titleKey = "exam.xml">
+					<a href="${requestURI}"
+						onclick='javascript:window.open("exam/xml.do?examId=${row.id}", "_blank", "scrollbars=1,resizable=1,height=500,width=900");'
+						title='XML'><spring:message code="exam.seexml"/></a>
+				</display:column>
+				<display:column titleKey = "exam.exercises">
+					<a href="exercise/listByExam.do?examId=${row.id }"
+						title='XML'><spring:message code="exam.exercises"/></a>
+				</display:column>
 				<display:column>
 					<a href="exam/administrator/edit.do?examId=${row.id}"><input
 						class="btn btn-default" type="button"
 						value="<spring:message code="exam.edit"/>"
+						onclick="self.location.href = exam/administrator/edit.do?examId=${row.id}" /></a>
+				</display:column>
+				
+				<display:column>
+					<a href="urldelete"><input
+						class="btn btn-default" type="button"
+						value="<spring:message code="exam.delete"/>"
 						onclick="self.location.href = exam/administrator/edit.do?examId=${row.id}" /></a>
 				</display:column>
 
@@ -45,10 +63,9 @@
 						code="exam.cancel" />
 				</a>
 			</jstl:if> --%>
-			<a href="examGroup/administrator/list.do"> <input
-				type="button" class="btn btn-default"
-				value="<spring:message code="exam.cancel"/>"
-				onclick="self.location.href = examGroup/administrator/list.do" /></a>
+			<a href="#"> <input type="button"
+				class="btn btn-default" value="<spring:message code="exam.cancel"/>"
+				onclick="self.location.href = #" /></a>
 
 
 		</div>

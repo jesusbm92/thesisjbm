@@ -12,24 +12,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ExamService;
-import domain.Exam;
+import services.ExerciseService;
+import domain.Exercise;
 import domain.Exercise;
 
 
 @Controller
-@RequestMapping("/exam")
-public class ExamController {
+@RequestMapping("/exercise")
+public class ExerciseController {
 
 	
 	// Services ----------------------------------------------------------------
 
 	@Autowired
-	private ExamService examService;
+	private ExerciseService exerciseService;
 
+	@Autowired
+	private ExamService examService;
 
 	// Constructor
 	// ---------------------------------------------------------------
-	public ExamController() {
+	public ExerciseController() {
 		super();
 	}
 
@@ -39,31 +42,31 @@ public class ExamController {
 	@RequestMapping("/list")
 	public ModelAndView list() {
 		ModelAndView result;
-		String uri = "exam/list";
-		String requestURI = "exam/list.do";
-		Collection<Exam> exams = examService.findAll();
-		result = createListModelAndView(requestURI, exams, uri);
+		String uri = "exercise/list";
+		String requestURI = "exercise/list.do";
+		Collection<Exercise> exercises = exerciseService.findAll();
+		result = createListModelAndView(requestURI, exercises, uri);
 
 		return result;
 	}
 	
-	@RequestMapping(value = "/xml", method = RequestMethod.GET)
+	@RequestMapping(value = "/listByExam", method = RequestMethod.GET)
 	public ModelAndView edit(@RequestParam int examId) {
 		ModelAndView result;
-		Exam exam = examService.findOne(examId);
+		Collection<Exercise> exercises = exerciseService.findByExamId(examId);
 
-		String uri = "exam/xml";
-		String requestURI = "exam/xml.do";
+		String uri = "exercise/listByExam";
+		String requestURI = "exercise/listByExam.do";
 		
-		result = createXMLModelAndView(requestURI, exam, uri);
+		result = createListModelAndView(requestURI, exercises, uri);
 
 		return result;
 	}
 	
 	// Other bussiness method
-//		protected ModelAndView createEditModelAndView(Exam exam,
+//		protected ModelAndView createEditModelAndView(Exercise exercise,
 //				String message) {
-//			assert exam != null;
+//			assert exercise != null;
 //			ModelAndView result;
 //			result = new ModelAndView("exercise/administrator/edit");
 //			result.addObject("exercise", exercise);
@@ -75,7 +78,7 @@ public class ExamController {
 //			return result;
 //		}
 
-//		protected ModelAndView createCreateModelAndView(Exam exam,
+//		protected ModelAndView createCreateModelAndView(Exercise exercise,
 //				String message) {
 //			assert exercise != null;
 //			Map<String, Integer> map = muscleService.findAllIdName();
@@ -91,22 +94,22 @@ public class ExamController {
 //		}
 
 		protected ModelAndView createListModelAndView(String requestURI,
-				Collection<Exam> exams, String uri) {
+				Collection<Exercise> exercises, String uri) {
 			ModelAndView result;
 
 			result = new ModelAndView(uri);
-			result.addObject("exams", exams);
+			result.addObject("exercises", exercises);
 			result.addObject("requestURI", requestURI);
 
 			return result;
 		}
 		
 		protected ModelAndView createXMLModelAndView(String requestURI,
-				Exam exam, String uri) {
+				Exercise exercise, String uri) {
 			ModelAndView result;
 
 			result = new ModelAndView(uri);
-			result.addObject("exam", exam);
+			result.addObject("exercise", exercise);
 			result.addObject("requestURI", requestURI);
 
 			return result;

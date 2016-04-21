@@ -20,6 +20,9 @@
 	<util:list id="converters">
 		<bean class="converters.ExamToStringConverter" />
 		<bean class="converters.StringToExamConverter" />
+		
+		<bean class="converters.ExerciseToStringConverter" />
+		<bean class="converters.StringToExerciseConverter" />
 	</util:list>
 	
 </beans>

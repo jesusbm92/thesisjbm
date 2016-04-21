@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!-- 
- * tiles.xml
+ * tiles_es.xml
  *
  * Copyright (C) 2014 Universidad de Sevilla
- * 
+ *
  * The use of this project is hereby constrained to the conditions of the 
  * TDG Licence, a copy of which you may download from 
  * http://www.tdg-seville.info/License.html
@@ -16,14 +16,9 @@
        
 <tiles-definitions>
 
-	<definition name="exam/list" extends="master.page">	
-		<put-attribute name="title" value="All exams" />
-		<put-attribute name="body" value="/views/exam/list.jsp" />
+		<definition name="exercise/listByExam" extends="master.page">	
+		<put-attribute name="title" value="Exercise by Exam" />
+		<put-attribute name="body" value="/views/exercise/list.jsp" />
 	</definition>
-	
-	<definition name="exam/xml" extends="master.page">	
-		<put-attribute name="title" value="XML" />
-		<put-attribute name="body" value="/views/exam/xml.jsp" />
-	</definition>
-	
+
 </tiles-definitions>
