@@ -38,6 +38,7 @@ import utilities.internal.DatabaseUtil;
 import domain.Answer;
 import domain.Exam;
 import domain.Exercise;
+import domain.Metadata;
 import domain.Question;
 import domain.Statistic;
 
@@ -342,6 +343,22 @@ public class FileToObjectsConverter {
 
 					finalDif = finalDif / count;
 					e.setDifficulty(String.valueOf(finalDif));
+					
+					//COMMENT / UNCOMMENT TO GENERATE TEST METADATAS
+//					Collection<Metadata> metadatas = new ArrayList<Metadata>();
+//					Metadata m1 = new Metadata();
+//					Metadata m2 = new Metadata();
+//					m1.setName("MetadataTest1");
+//					m2.setName("MetadataTest2");
+//					metadatas.add(m1);
+//					metadatas.add(m2);
+//					Collection<Question> qsts = new ArrayList<Question>();
+//					qsts.add(question);
+//					m1.setQuestions(qsts);
+//					m2.setQuestions(qsts);
+//					question.setMetadata(metadatas);
+					//COMMENT
+					
 					for (Answer a : answers) {
 						xmlToQuestion = xmlToQuestion
 								.concat("<respuesta correcta=\""
@@ -364,7 +381,10 @@ public class FileToObjectsConverter {
 					e.setXml(xmlToExam);
 					// DATABASE INSERT
 					databaseUtil.openTransaction();
-
+					//COMMENT / UNCOMMENT TO GENERATE TEST METADATAS
+//					for (Metadata m : metadatas) {
+//						databaseUtil.persist(m);
+//					}
 					databaseUtil.persist(question);
 					for (Answer a : answers) {
 						databaseUtil.persist(a);

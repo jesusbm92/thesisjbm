@@ -10,14 +10,12 @@
 
 <tiles-definitions>
 
-	<definition name="exam/list" extends="master.page">
-		<put-attribute name="title" value="Inicio" />
-		<put-attribute name="body" value="/views/exam/list.jsp" />
+	<definition name="question/listByExercise" extends="master.page">
+		<put-attribute name="title" value="Pregunta por examen" />
+		<put-attribute name="body" value="/views/question/list.jsp" />
 	</definition>
-
-	<definition name="exam/xml" template="/views/exam/xml.jsp">
+	<definition name="question/xml" template="/views/question/xml.jsp">
 		<put-attribute name="title" value="XML" />
-		<put-attribute name="body" value="/views/exam/xml.jsp" />
+		<put-attribute name="body" value="/views/question/xml.jsp" />
 	</definition>
-
 </tiles-definitions>

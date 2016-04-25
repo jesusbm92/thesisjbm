@@ -10,6 +10,6 @@
 
 <div class="container">
 	<div class="row">
-		<textarea cols="300" rows = "300">${exam.xml}</textarea>
+		<textarea cols="300" rows = "300">${question.xml}</textarea>
 	</div>
 </div>

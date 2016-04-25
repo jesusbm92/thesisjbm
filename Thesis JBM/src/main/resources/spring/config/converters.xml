@@ -23,6 +23,10 @@
 		
 		<bean class="converters.ExerciseToStringConverter" />
 		<bean class="converters.StringToExerciseConverter" />
+		
+		<bean class="converters.QuestionToStringConverter" />
+		<bean class="converters.StringToQuestionConverter" />
+		
 	</util:list>
 	
 </beans>

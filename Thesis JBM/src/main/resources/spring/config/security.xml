@@ -54,6 +54,8 @@
 		
 		<security:intercept-url pattern="/exam/**" access="isAuthenticated()" /> 
 		<security:intercept-url pattern="/exercise/**" access="isAuthenticated()" /> 
+		<security:intercept-url pattern="/question/**" access="isAuthenticated()" /> 
+		
 		
 	
 		<security:intercept-url pattern="/**" access="hasRole('NONE')" />

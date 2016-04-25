@@ -126,7 +126,7 @@ public class Question extends DomainEntity {
 
 	@Valid
 	@NotNull
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.PERSIST)
 	public Collection<Metadata> getMetadata() {
 		return metadata;
 	}
