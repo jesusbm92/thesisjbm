@@ -24,6 +24,8 @@
 		<value>/views/exam/messages</value>
 		<value>/views/exercise/messages</value>
 		<value>/views/question/messages</value>
+		<value>/views/answer/messages</value>
+		<value>/views/metadata/messages</value>
 	</util:list>
 
 </beans>

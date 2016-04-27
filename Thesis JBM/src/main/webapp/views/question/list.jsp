@@ -29,7 +29,11 @@
 						<a href="javascript:void(0);"
 							onclick='javascript:window.open("question/xml.do?questionId=${row.id}", "_blank", "scrollbars=1,resizable=1,height=500,width=900");'
 							title='XML'><spring:message code="question.seexml" /></a>
-					</display:column>
+				</display:column>
+				<display:column titleKey = "question.answers">
+					<a href="answer/listByQuestion.do?questionId=${row.id }"
+						title='Answers'><spring:message code="question.answers"/></a>
+				</display:column>
 				<display:column property="difficulty" titleKey="question.difficulty" sortable="true" />
 				<display:column property="weight" titleKey="question.weight" sortable="false" />
 				<display:column property="weightfail" titleKey="question.weightfail" sortable="false" />

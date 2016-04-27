@@ -27,6 +27,11 @@
 		<bean class="converters.QuestionToStringConverter" />
 		<bean class="converters.StringToQuestionConverter" />
 		
+		<bean class="converters.AnswerToStringConverter" />
+		<bean class="converters.StringToAnswerConverter" />
+		
+		<bean class="converters.MetadataToStringConverter" />
+		<bean class="converters.StringToMetadataConverter" />
 	</util:list>
 	
 </beans>

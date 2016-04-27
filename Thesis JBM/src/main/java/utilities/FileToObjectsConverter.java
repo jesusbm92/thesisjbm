@@ -48,11 +48,11 @@ public class FileToObjectsConverter {
 //		
 //	}
 
-	
 
 	public static void main(String[] args) {
 		DatabaseUtil databaseUtil;
 
+		List<Answer> orderedAnswers = new ArrayList<Answer>();
 		databaseUtil = null;
 
 		BufferedReader br = null;
@@ -193,12 +193,13 @@ public class FileToObjectsConverter {
 
 						else {
 							Answer a = new Answer();
-							Pattern p = Pattern.compile("\\p{L}");
+							Pattern p = Pattern.compile("[^\\s\\\\]");
 							Matcher m = p.matcher(copy);
 							if (m.find()) {
 								Integer indexStart = m.start();
 								copy = copy.substring(indexStart);
 								// System.out.println(copy);
+								if(copy.contains("TRUE")||copy.contains("FALSE")){
 								String[] splitted = copy.split("\\s+");
 								a.setText("");
 								for (int i = 0; i < splitted.length; i++) {
@@ -223,6 +224,13 @@ public class FileToObjectsConverter {
 								// about penalty is given in the tsts
 								a.setPenalty(0.0);
 								answers.add(a);
+								orderedAnswers.add(a);
+								}
+								
+								else{
+									Answer aux = orderedAnswers.get(orderedAnswers.size()-1);
+									aux.setText(aux.getText()+ " "+copy);
+								}
 
 							}
 
