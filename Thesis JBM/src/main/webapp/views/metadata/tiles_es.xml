@@ -15,5 +15,14 @@
 		<put-attribute name="body" value="/views/metadata/list.jsp" />
 	</definition>
 
+	<definition name="metadata/create" extends="master.page">
+		<put-attribute name="title" value="Crear Metadato" />
+		<put-attribute name="body" value="/views/metadata/edit.jsp" />
+	</definition>
+	
+			<definition name="metadata/edit" extends="master.page">
+		<put-attribute name="title" value="Editar Metadato" />
+		<put-attribute name="body" value="/views/metadata/edit.jsp" />
+	</definition>
 
 </tiles-definitions>

@@ -17,35 +17,33 @@
 		<div class="row">
 			<div class="table-responsive">
 
-				<display:table uid="metadatasListTable" keepStatus="false" name="metadatas"
-					pagesize="10" class="table table-hover" requestURI="${requestURI}"
-					id="row">
+				<display:table uid="metadatasListTable" keepStatus="false"
+					name="metadatas" pagesize="10" class="table table-hover"
+					requestURI="${requestURI}" id="row">
 
 
 					<display:column property="name" titleKey="metadata.name"
 						sortable="true" />
 					<display:column>
-						<a href="metadata/administrator/edit.do?metadataId=${row.id}"><input
+						<a href="metadata/edit.do?metadataId=${row.id}"><input
 							class="btn btn-default" type="button"
 							value="<spring:message code="metadata.edit"/>"
-							onclick="self.location.href = metadata/administrator/edit.do?metadataId=${row.id}" /></a>
+							onclick="self.location.href = metadata/edit.do?metadataId=${row.id}" /></a>
 					</display:column>
 
 					<display:column>
-						<a href="urldelete"><input class="btn btn-default"
-							type="button" value="<spring:message code="metadata.delete"/>"
-							onclick="self.location.href = metadata/administrator/edit.do?metadataId=${row.id}" /></a>
+						
 					</display:column>
 
 
 
 				</display:table>
-				<jstl:if test="${!other }">
-					<a href="metadata/administrator/create.do"><input type="button"
-						class="btn btn-default"
-						value="<spring:message code="metadata.create"/>"
-						onclick="self.location.href = metadata/administrator/create.do" /></a>
-				</jstl:if>
+
+				<a href="metadata/create.do"><input type="button"
+					class="btn btn-default"
+					value="<spring:message code="metadata.create"/>"
+					onclick="self.location.href = metadata/create.do" /></a>
+
 				<%-- 
 			<jstl:if test="${other }">
 				<a href="metadataGroup/administrator/list.do" type="button"> <spring:message

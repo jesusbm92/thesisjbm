@@ -34,7 +34,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
-import utilities.internal.DatabaseUtil;
+import utilities.internal.CopyOfDatabaseUtil;
 import domain.Answer;
 import domain.Exam;
 import domain.Exercise;
@@ -50,7 +50,7 @@ public class FileToObjectsConverter {
 
 
 	public static void main(String[] args) {
-		DatabaseUtil databaseUtil;
+		CopyOfDatabaseUtil databaseUtil;
 
 		List<Answer> orderedAnswers = new ArrayList<Answer>();
 		databaseUtil = null;
@@ -66,7 +66,7 @@ public class FileToObjectsConverter {
 
 			System.out.printf("Initialising persistence context `%s'...%n",
 					DatabaseConfig.PersistenceUnit);
-			databaseUtil = new DatabaseUtil();
+			databaseUtil = new CopyOfDatabaseUtil();
 
 			System.out.printf("Creating database `%s' (%s)...%n",
 					databaseUtil.getDatabaseName(),

@@ -9,23 +9,30 @@
  */
  
 table {
-	border: 1px solid #666;
-	width: 80%;
+	border: 1px solid #7f7f7f;
+	width: 100%;
 	margin: 20px 0 20px 0 !important;
+	
+	box-shadow: 10px 10px 5px #888888;
 }
 
 th,td {
 	padding: 2px 4px 2px 4px !important;
 	text-align: left;
 	vertical-align: top;
+	border-left: 1px solid #666;
+	border-right: 1px solid #666;
 }
 
 thead tr {
-	background-color: #fc0;
+/* 	background-color: #C3D9FF; */
+	background-image: -webkit-linear-gradient(top,#f5f5f5 0,#e8e8e8 100%);
+	background-image: linear-gradient(to bottom,#f5f5f5 0,#e8e8e8 100%);
+	background-repeat: repeat-x;
 }
 
 th.sorted {
-	background-color: orange;
+/* 	background-color: orange; */
 }
 
 th a,th a:visited {
@@ -63,11 +70,11 @@ th.order2 a {
 }
 
 tr.odd {
-	background-color: #fff
+	background-color: #E5ECF9
 }
 
 tr.tableRowEven,tr.even {
-	background-color: #fea
+	background-color: #fff
 }
 
 div.exportlinks {
@@ -109,7 +116,7 @@ span.pagebanner {
 	background-color: #eee;
 	border: 1px dotted #999;
 	padding: 2px 4px 2px 4px;
-	width: 79%;
+	width: 100%;
 	margin-top: 10px;
 	display: block;
 	border-bottom: none;
@@ -119,7 +126,7 @@ span.pagelinks {
 	background-color: #eee;
 	border: 1px dotted #999;
 	padding: 2px 4px 2px 4px;
-	width: 79%;
+	width: 100%;
 	display: block;
 	border-top: none;
 	margin-bottom: -5px;
