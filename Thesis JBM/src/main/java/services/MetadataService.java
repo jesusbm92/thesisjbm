@@ -1,5 +1,6 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import domain.Metadata;
+import domain.Question;
 
 import repositories.MetadataRepository;
 
@@ -93,9 +95,10 @@ public class MetadataService {
 			Assert.notNull(metadata);
 			// TODO Restricciones de Borrado
 
-			// FALTA SABER LO QUE NO SE PUEDE BORRAR SI ESTA ASIGNADO A ALGUN
-			// EJERCICIO DE GRUPO DE UN PLAN
-
+			for (Question q: metadata.getQuestions()){
+				q.getMetadata().remove(metadata);				
+			}
+			metadata.setQuestions(new ArrayList<Question>());
 			metadataRepository.delete(metadata);
 		}
 

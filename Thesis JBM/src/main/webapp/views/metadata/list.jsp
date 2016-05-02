@@ -31,10 +31,6 @@
 							onclick="self.location.href = metadata/edit.do?metadataId=${row.id}" /></a>
 					</display:column>
 
-					<display:column>
-						
-					</display:column>
-
 
 
 				</display:table>

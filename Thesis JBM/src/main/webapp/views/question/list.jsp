@@ -39,7 +39,12 @@
 				<display:column property="weightfail" titleKey="question.weightfail" sortable="false" />
 				<display:column titleKey="question.metadata">			
 				<jstl:forEach items="${row.metadata }" var="meta">
+				<jstl:if test="${row.metadata.indexOf(meta)!= row.metadata.size()-1 }">
 				${meta.getName() }, 
+				</jstl:if>
+				<jstl:if test="${row.metadata.indexOf(meta)== row.metadata.size()-1 }">
+				${meta.getName() } 
+				</jstl:if>
 				</jstl:forEach>
 				</display:column>	
 				<display:column>

@@ -84,7 +84,7 @@ public class MetadataController {
 
 			if (binding.hasErrors()) {
 				if (metadata.getId() == 0) {
-					result = createEditModelAndView(metadata, "metadata.commit.error");
+					result = createCreateModelAndView(metadata, "metadata.commit.error");
 				} else {
 					result = createCreateModelAndView(metadata, "metadata.commit.error");
 				}
@@ -94,7 +94,8 @@ public class MetadataController {
 					result = new ModelAndView("redirect:list.do");
 				} catch (Throwable oops) {
 					if (metadata.getId() == 0) {
-						result = createEditModelAndView(metadata, "metadata.commit.error");
+						redirect.addFlashAttribute("successMessage", "metadata.deleteSuccess");
+						result = createCreateModelAndView(metadata, "metadata.commit.error");
 					} else {
 						result = createCreateModelAndView(metadata, "metadata.commit.error");
 					}
@@ -156,6 +157,7 @@ public class MetadataController {
 			result = new ModelAndView("metadata/edit");
 			result.addObject("questions", questions);
 			result.addObject("metadata", metadata);
+			result.addObject("message", message);
 
 			return result;
 		}
@@ -169,6 +171,7 @@ public class MetadataController {
 			result.addObject("questions", questions);
 			result.addObject("create", true);
 			result.addObject("metadata", metadata);
+			result.addObject("message", message);
 
 			return result;
 		}
