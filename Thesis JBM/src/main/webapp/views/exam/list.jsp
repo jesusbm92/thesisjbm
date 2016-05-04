@@ -38,27 +38,19 @@
 								code="exam.exercises" /></a>
 					</display:column>
 					<display:column>
-						<a href="exam/administrator/edit.do?examId=${row.id}"><input
+						<a href="exam/edit.do?examId=${row.id}"><input
 							class="btn btn-default" type="button"
 							value="<spring:message code="exam.edit"/>"
-							onclick="self.location.href = exam/administrator/edit.do?examId=${row.id}" /></a>
-					</display:column>
-
-					<display:column>
-						<a href="urldelete"><input class="btn btn-default"
-							type="button" value="<spring:message code="exam.delete"/>"
-							onclick="self.location.href = exam/administrator/edit.do?examId=${row.id}" /></a>
+							onclick="self.location.href = exam/edit.do?examId=${row.id}" /></a>
 					</display:column>
 
 
 
 				</display:table>
-				<jstl:if test="${!other }">
-					<a href="exam/administrator/create.do"><input type="button"
+					<a href="exam/create.do"><input type="button"
 						class="btn btn-default"
 						value="<spring:message code="exam.create"/>"
-						onclick="self.location.href = exam/administrator/create.do" /></a>
-				</jstl:if>
+						onclick="self.location.href = exam/create.do" /></a>
 				<%-- 
 			<jstl:if test="${other }">
 				<a href="examGroup/administrator/list.do" type="button"> <spring:message

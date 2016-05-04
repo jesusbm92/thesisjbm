@@ -1,32 +1,43 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import services.ExamService;
+import services.ExerciseService;
 import domain.Exam;
 import domain.Exercise;
-
+import domain.Exam;
+import domain.Exam;
+import domain.Question;
 
 @Controller
 @RequestMapping("/exam")
 public class ExamController {
 
-	
 	// Services ----------------------------------------------------------------
 
 	@Autowired
 	private ExamService examService;
 
-
+	@Autowired
+	private ExerciseService exerciseService;
+	
 	// Constructor
 	// ---------------------------------------------------------------
 	public ExamController() {
@@ -46,71 +57,175 @@ public class ExamController {
 
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/xml", method = RequestMethod.GET)
-	public ModelAndView edit(@RequestParam int examId) {
+	public ModelAndView xml(@RequestParam int examId) {
 		ModelAndView result;
 		Exam exam = examService.findOne(examId);
 
 		String uri = "exam/xml";
 		String requestURI = "exam/xml.do";
-		
+
 		result = createXMLModelAndView(requestURI, exam, uri);
 
 		return result;
 	}
-	
+
+	// Creation
+	// ------------------------------------------------------------------
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	public ModelAndView create() {
+
+		ModelAndView result;
+
+		Exam exam = examService.create();
+
+		result = createCreateModelAndView(exam);
+		return result;
+	}
+
+	// Edition
+	// -------------------------------------------------------------------
+
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
+	public ModelAndView edit(@RequestParam int examId) {
+		ModelAndView result;
+		Exam exam = examService.findOne(examId);
+
+		result = createEditModelAndView(exam);
+
+		return result;
+	}
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
+	public ModelAndView save(@Valid Exam exam, BindingResult binding,
+			RedirectAttributes redirect) {
+		ModelAndView result;
+
+		if (binding.hasErrors()) {
+			if (exam.getId() == 0) {
+				result = createCreateModelAndView(exam, "exam.commit.error");
+			} else {
+				result = createCreateModelAndView(exam, "exam.commit.error");
+			}
+		} else {
+			try {
+				exam.setDifficulty("?");
+				exam.setDate(new Date());
+				exam.setXml("");
+				examService.save(exam);
+				result = new ModelAndView("redirect:list.do");
+			} catch (Throwable oops) {
+				if (exam.getId() == 0) {
+					redirect.addFlashAttribute("successMessage",
+							"exam.deleteSuccess");
+					result = createCreateModelAndView(exam, "exam.commit.error");
+				} else {
+					result = createCreateModelAndView(exam, "exam.commit.error");
+				}
+
+			}
+
+		}
+
+		return result;
+	}
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
+	public ModelAndView delete(@ModelAttribute Exam exam,
+			BindingResult bindingResult, RedirectAttributes redirect) {
+		ModelAndView result;
+
+		try {
+			redirect.addFlashAttribute("successMessage", "exam.deleteSuccess");
+			examService.delete(exam);
+			result = new ModelAndView("redirect:list.do");
+		} catch (Throwable oops) {
+			if (oops.getMessage() == "Error") {
+				result = createEditModelAndView(exam, "exam.error");
+			} else {
+				result = createEditModelAndView(exam, "exam.commit.error");
+			}
+		}
+		return result;
+	}
+
 	// Other bussiness method
-//		protected ModelAndView createEditModelAndView(Exam exam,
-//				String message) {
-//			assert exam != null;
-//			ModelAndView result;
-//			result = new ModelAndView("exercise/administrator/edit");
-//			result.addObject("exercise", exercise);
-//			result.addObject("message", message);
-//			result.addObject("create", false);
-//			result.addObject("languages", Language.values());
-//			result.addObject("map", map);
-//
-//			return result;
-//		}
 
-//		protected ModelAndView createCreateModelAndView(Exam exam,
-//				String message) {
-//			assert exercise != null;
-//			Map<String, Integer> map = muscleService.findAllIdName();
-//			ModelAndView result;
-//			result = new ModelAndView("exercise/administrator/create");
-//			result.addObject("exercise", exercise);
-//			result.addObject("map", map);
-//			result.addObject("message", message);
-//			result.addObject("languages", Language.values());
-//			result.addObject("create", true);
-//
-//			return result;
-//		}
+	protected ModelAndView createEditModelAndView(Exam exam) {
+		assert exam != null;
 
-		protected ModelAndView createListModelAndView(String requestURI,
-				Collection<Exam> exams, String uri) {
-			ModelAndView result;
+		ModelAndView result;
 
-			result = new ModelAndView(uri);
-			result.addObject("exams", exams);
-			result.addObject("requestURI", requestURI);
+		result = createEditModelAndView(exam, null);
 
-			return result;
-		}
-		
-		protected ModelAndView createXMLModelAndView(String requestURI,
-				Exam exam, String uri) {
-			ModelAndView result;
+		return result;
+	}
 
-			result = new ModelAndView(uri);
-			result.addObject("exam", exam);
-			result.addObject("requestURI", requestURI);
+	protected ModelAndView createCreateModelAndView(Exam exam) {
+		assert exam != null;
 
-			return result;
-		}
+		ModelAndView result;
+
+		result = createCreateModelAndView(exam, null);
+		return result;
+	}
 	
-	
+	protected ModelAndView createCreateWithDataModelAndView(Exam exam) {
+		assert exam != null;
+
+		ModelAndView result;
+
+		result = createCreateModelAndView(exam, null);
+		return result;
+	}
+
+	// Other bussiness method
+	protected ModelAndView createEditModelAndView(Exam exam, String message) {
+		assert exam != null;
+		Collection<Exercise> exercises = exerciseService.findAll();
+		ModelAndView result;
+		result = new ModelAndView("exam/edit");
+		result.addObject("allexercises", exercises);
+		result.addObject("exam", exam);
+		result.addObject("message", message);
+
+		return result;
+	}
+
+	protected ModelAndView createCreateModelAndView(Exam exam, String message) {
+		assert exam != null;
+		Collection<Exercise> exercises = exerciseService.findAll();
+		ModelAndView result;
+		result = new ModelAndView("exam/create");
+		result.addObject("allexercises", exercises);
+		result.addObject("create", true);
+		result.addObject("exam", exam);
+		result.addObject("message", message);
+
+		return result;
+	}
+
+	protected ModelAndView createListModelAndView(String requestURI,
+			Collection<Exam> exams, String uri) {
+		ModelAndView result;
+
+		result = new ModelAndView(uri);
+		result.addObject("exams", exams);
+		result.addObject("requestURI", requestURI);
+
+		return result;
+	}
+
+	protected ModelAndView createXMLModelAndView(String requestURI, Exam exam,
+			String uri) {
+		ModelAndView result;
+
+		result = new ModelAndView(uri);
+		result.addObject("exam", exam);
+		result.addObject("requestURI", requestURI);
+
+		return result;
+	}
+
 }

@@ -1,5 +1,6 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import domain.Exam;
+import domain.Exercise;
 
 import repositories.ExamRepository;
 
@@ -93,9 +95,10 @@ public class ExamService {
 			Assert.notNull(exam);
 			// TODO Restricciones de Borrado
 
-			// FALTA SABER LO QUE NO SE PUEDE BORRAR SI ESTA ASIGNADO A ALGUN
-			// EJERCICIO DE GRUPO DE UN PLAN
-
+			for (Exercise q: exam.getExercises()){
+				q.getExams().remove(exam);				
+			}
+			exam.setExercises(new ArrayList<Exercise>());			
 			examRepository.delete(exam);
 		}
 
