@@ -28,27 +28,20 @@
 						title='Questions'><spring:message code="exercise.questions"/></a>
 				</display:column>
 				<display:column>
-					<a href="exercise/administrator/edit.do?exerciseId=${row.id}"><input
+					<a href="exercise/edit.do?exerciseId=${row.id}&examId=${param.examId}"><input
 						class="btn btn-default" type="button"
 						value="<spring:message code="exercise.edit"/>"
-						onclick="self.location.href = exercise/administrator/edit.do?exerciseId=${row.id}" /></a>
-				</display:column>
-				
-				<display:column>
-					<a href="urldelete"><input
-						class="btn btn-default" type="button"
-						value="<spring:message code="exercise.delete"/>"
-						onclick="self.location.href = exercise/administrator/edit.do?exerciseId=${row.id}" /></a>
+						onclick="self.location.href = exercise/edit.do?exerciseId=${row.id}" /></a>
 				</display:column>
 
 
 
 			</display:table>
 			<jstl:if test="${!other }">
-				<a href="exercise/administrator/create.do"><input type="button"
+				<a href="exercise/create.do?examId=${param.examId }"><input type="button"
 					class="btn btn-default"
 					value="<spring:message code="exercise.create"/>"
-					onclick="self.location.href = exercise/administrator/create.do" /></a>
+					onclick="self.location.href = exercise/create.do?examId=<% request.getParameter("examId");%>" /></a>
 			</jstl:if>
 			<%-- 
 			<jstl:if test="${other }">

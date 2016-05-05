@@ -1,5 +1,6 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import domain.Exam;
 import domain.Exercise;
+import domain.Question;
 
 import repositories.ExerciseRepository;
 
@@ -63,18 +66,6 @@ public class ExerciseService {
 	 * @return void
 	 */
 	public void save(Exercise exercise) {
-		// TODO Restricciones de Save
-		// Muscle muscle = exercise.getMuscle();
-		//
-		// muscle.getExercises().add(exercise);
-		//
-		// muscleService.save(muscle);
-		//
-		// ExerciseGroup exerciseGroup = exercise.getExerciseGroup();
-		//
-		// exerciseGroup.getExercises().add(exercise);
-		//
-		// exerciseGroupService.save(exerciseGroup);
 
 		exerciseRepository.save(exercise);
 	}
@@ -89,9 +80,16 @@ public class ExerciseService {
 		Assert.notNull(exercise);
 		// TODO Restricciones de Borrado
 
-		// FALTA SABER LO QUE NO SE PUEDE BORRAR SI ESTA ASIGNADO A ALGUN
-		// EJERCICIO DE GRUPO DE UN PLAN
-
+		for (Question q: exercise.getQuestions()){
+			q.getExercises().remove(exercise);				
+		}
+		
+		for (Exam e: exercise.getExams()){
+			e.getExercises().remove(exercise);				
+		}
+		
+		exercise.setQuestions(new ArrayList<Question>());
+		exercise.setExams(new ArrayList<Exam>());
 		exerciseRepository.delete(exercise);
 	}
 
