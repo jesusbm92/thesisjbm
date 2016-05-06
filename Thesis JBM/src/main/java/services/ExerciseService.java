@@ -80,17 +80,21 @@ public class ExerciseService {
 		Assert.notNull(exercise);
 		// TODO Restricciones de Borrado
 
-		for (Question q: exercise.getQuestions()){
-			q.getExercises().remove(exercise);				
+		for (Question q : exercise.getQuestions()) {
+			q.getExercises().remove(exercise);
 		}
-		
-		for (Exam e: exercise.getExams()){
-			e.getExercises().remove(exercise);				
+
+		for (Exam e : exercise.getExams()) {
+			e.getExercises().remove(exercise);
 		}
-		
-		exercise.setQuestions(new ArrayList<Question>());
-		exercise.setExams(new ArrayList<Exam>());
-		exerciseRepository.delete(exercise);
+
+		if (exercise.getExams().size() == 0) {
+			exercise.setQuestions(new ArrayList<Question>());
+			exercise.setExams(new ArrayList<Exam>());
+			exerciseRepository.delete(exercise);
+		} else {
+			exerciseRepository.save(exercise);
+		}
 	}
 
 	public Collection<Exercise> findByExamId(int examId) {

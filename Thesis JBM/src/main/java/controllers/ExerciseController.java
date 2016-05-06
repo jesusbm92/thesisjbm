@@ -1,11 +1,14 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
@@ -17,11 +20,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mchange.v2.beans.BeansUtils;
+
 import services.ExamService;
 import services.ExerciseService;
 import domain.Exam;
 import domain.Exercise;
 import domain.Exercise;
+import domain.Question;
 
 @Controller
 @RequestMapping("/exercise")
@@ -68,6 +74,19 @@ public class ExerciseController {
 		return result;
 	}
 
+	@RequestMapping(value = "/allToPick", method = RequestMethod.GET)
+	public ModelAndView alltopick(@RequestParam int examId) {
+		ModelAndView result;
+		Collection<Exercise> exercises = exerciseService.findAll();
+
+		String uri = "exercise/allToPick";
+		String requestURI = "exercise/allToPick.do";
+
+		result = createListModelAndView(requestURI, exercises, uri);
+		result.addObject("pickToCopy", true);
+		return result;
+	}
+
 	// Creation
 	// ------------------------------------------------------------------
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
@@ -78,6 +97,47 @@ public class ExerciseController {
 		Exercise exercise = exerciseService.create();
 
 		result = createCreateModelAndView(exercise);
+		return result;
+	}
+
+	@RequestMapping(value = "/createFromParent", method = RequestMethod.GET)
+	public ModelAndView createFromParent(@RequestParam int examId,
+			@RequestParam int exerciseId, RedirectAttributes redirect) {
+		ModelAndView result;
+		Exercise exercise = new Exercise();
+
+		try {
+
+			Exercise exParent = exerciseService.findOne(exerciseId);
+			Exam exam = examService.findOne(examId);
+			BeanUtils.copyProperties(exercise, exParent);
+			exercise.setId(0);
+			Collection<Exam> exams = new ArrayList<Exam>();
+			Collection<Question> questions = new ArrayList<Question>();
+			questions.addAll(exParent.getQuestions());
+			exams.addAll(exParent.getExams());
+			exercise.setExams(exams);
+			exercise.setQuestions(questions);
+			exercise.getExams().add(exam);
+			exam.getExercises().add(exercise);
+			exerciseService.save(exercise);
+			String uri = "exercise/listByExam";
+			String requestURI = "exercise/listByExam.do";
+			result = createListModelAndView(requestURI, exam.getExercises(),
+					uri);
+		} catch (Throwable oops) {
+			if (exercise.getId() == 0) {
+				redirect.addFlashAttribute("successMessage",
+						"exercise.deleteSuccess");
+				result = createCreateModelAndView(exercise,
+						"exercise.commit.error");
+			} else {
+				result = createCreateModelAndView(exercise,
+						"exercise.commit.error");
+			}
+
+		}
+
 		return result;
 	}
 

@@ -137,7 +137,7 @@ public class Question extends DomainEntity {
 
 	@Valid
 	@NotNull
-	@OneToMany(mappedBy = "question" ,cascade=CascadeType.PERSIST)
+	@OneToMany(mappedBy = "question" ,cascade=CascadeType.ALL)
 	public Collection<Answer> getAnswers() {
 		return answers;
 	}

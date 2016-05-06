@@ -8,6 +8,7 @@ import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -56,7 +57,7 @@ public class Exercise extends DomainEntity{
 
 	@Valid
 	@NotNull
-	@ManyToMany(mappedBy = "exercises")
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "exercises")
 	public Collection<Exam> getExams() {
 		return exams;
 	}
@@ -67,7 +68,7 @@ public class Exercise extends DomainEntity{
 
 	@Valid
 	@NotNull
-	@ManyToMany(cascade=CascadeType.PERSIST)
+	@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
 	public Collection<Question> getQuestions() {
 		return questions;
 	}

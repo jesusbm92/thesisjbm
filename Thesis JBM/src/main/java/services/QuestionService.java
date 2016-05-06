@@ -1,5 +1,6 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import domain.Exam;
+import domain.Exercise;
+import domain.Metadata;
 import domain.Question;
 
 import repositories.QuestionRepository;
@@ -63,18 +67,6 @@ public class QuestionService {
 	 * @return void
 	 */
 	public void save(Question question) {
-		// TODO Restricciones de Save
-		// Muscle muscle = question.getMuscle();
-		//
-		// muscle.getQuestions().add(question);
-		//
-		// muscleService.save(muscle);
-		//
-		// QuestionGroup questionGroup = question.getQuestionGroup();
-		//
-		// questionGroup.getQuestions().add(question);
-		//
-		// questionGroupService.save(questionGroup);
 
 		questionRepository.save(question);
 	}
@@ -87,7 +79,19 @@ public class QuestionService {
 	 */
 	public void delete(Question question) {
 		Assert.notNull(question);
-		// TODO Restricciones de Borrado
+
+		for (Exercise e: question.getExercises()){
+			e.getQuestions().remove(question);				
+		}
+		
+		for (Metadata m: question.getMetadata()){
+			m.getQuestions().remove(question);				
+		}
+		
+		question.setExercises(new ArrayList<Exercise>());
+		question.setMetadata(new ArrayList<Metadata>());
+		
+		
 
 		questionRepository.delete(question);
 	}

@@ -24,5 +24,11 @@
 		<put-attribute name="title" value="Editar Ejercicio" />
 		<put-attribute name="body" value="/views/exercise/edit.jsp" />
 	</definition>
+	
+	
+	<definition name="exercise/allToPick" extends="master.page">
+		<put-attribute name="title" value="Seleccionar ejercicio a copiar" />
+		<put-attribute name="body" value="/views/exercise/list.jsp" />
+	</definition>
 
 </tiles-definitions>

@@ -18,4 +18,15 @@
 		<put-attribute name="title" value="XML" />
 		<put-attribute name="body" value="/views/question/xml.jsp" />
 	</definition>
+	
+	<definition name="question/create" extends="master.page">
+		<put-attribute name="title" value="Crear Pregunta" />
+		<put-attribute name="body" value="/views/question/edit.jsp" />
+	</definition>
+
+	<definition name="question/edit" extends="master.page">
+		<put-attribute name="title" value="Editar Pregunta" />
+		<put-attribute name="body" value="/views/question/edit.jsp" />
+	</definition>
+	
 </tiles-definitions>
