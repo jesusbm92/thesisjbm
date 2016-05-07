@@ -62,21 +62,9 @@ public class AnswerService {
 	 * 
 	 * @return void
 	 */
-	public void save(Answer answer) {
-		// TODO Restricciones de Save
-		// Muscle muscle = answer.getMuscle();
-		//
-		// muscle.getAnswers().add(answer);
-		//
-		// muscleService.save(muscle);
-		//
-		// AnswerGroup answerGroup = answer.getAnswerGroup();
-		//
-		// answerGroup.getAnswers().add(answer);
-		//
-		// answerGroupService.save(answerGroup);
+	public Answer save(Answer answer) {
 
-		answerRepository.save(answer);
+		return answerRepository.save(answer);
 	}
 
 	/**

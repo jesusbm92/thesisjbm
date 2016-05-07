@@ -22,12 +22,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mchange.v2.beans.BeansUtils;
 
+import services.AnswerService;
 import services.ExamService;
 import services.ExerciseService;
+import services.QuestionService;
+import domain.Answer;
 import domain.Exam;
 import domain.Exercise;
 import domain.Exercise;
+import domain.Metadata;
 import domain.Question;
+import domain.Statistic;
 
 @Controller
 @RequestMapping("/exercise")
@@ -41,6 +46,12 @@ public class ExerciseController {
 	@Autowired
 	private ExamService examService;
 
+	@Autowired
+	private QuestionService questionService;
+	
+	@Autowired
+	private AnswerService answerService;
+	
 	// Constructor
 	// ---------------------------------------------------------------
 	public ExerciseController() {
@@ -114,7 +125,32 @@ public class ExerciseController {
 			exercise.setId(0);
 			Collection<Exam> exams = new ArrayList<Exam>();
 			Collection<Question> questions = new ArrayList<Question>();
-			questions.addAll(exParent.getQuestions());
+			for (Question q: exParent.getQuestions()){
+				Question qst = new Question();
+				qst.setDifficulty(q.getDifficulty());
+				Statistic s = new Statistic();
+				s.setQuestion(qst);
+				s.setPercentage(q.getStatistic().getPercentage());
+				qst.setStatistic(s);
+				qst.setName(q.getName());
+				qst.setText(q.getText());
+				qst.setWeight(q.getWeight());
+				qst.setWeightfail(q.getWeightfail());
+				qst.setXml(q.getXml());
+				Collection<Metadata> metadatas = new ArrayList<Metadata>();
+				metadatas.addAll(q.getMetadata());
+				qst.getExercises().add(exercise);
+				qst = questionService.save(qst);
+				questions.add(qst);
+				for(Answer a : q.getAnswers()){
+					Answer answer = new Answer();
+					BeanUtils.copyProperties(answer, a);
+					answer.setQuestion(qst);
+					answer.setId(0);
+					qst.getAnswers().add(answerService.save(answer));
+				}
+			}
+//			questions.addAll(exParent.getQuestions());
 			exams.addAll(exParent.getExams());
 			exercise.setExams(exams);
 			exercise.setQuestions(questions);

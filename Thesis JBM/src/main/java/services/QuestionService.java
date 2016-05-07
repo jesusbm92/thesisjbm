@@ -66,9 +66,9 @@ public class QuestionService {
 	 * 
 	 * @return void
 	 */
-	public void save(Question question) {
+	public Question save(Question question) {
 
-		questionRepository.save(question);
+		return questionRepository.save(question);
 	}
 
 	/**
