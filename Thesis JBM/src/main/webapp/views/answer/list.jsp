@@ -27,27 +27,18 @@
 				<display:column property="penalty" titleKey="answer.penalty" sortable="true" />
 	
 				<display:column>
-					<a href="answer/administrator/edit.do?answerId=${row.id}"><input
+					<a href="answer/edit.do?answerId=${row.id}&questionId=${param.questionId}"><input
 						class="btn btn-default" type="button"
 						value="<spring:message code="answer.edit"/>"
-						onclick="self.location.href = answer/administrator/edit.do?answerId=${row.id}" /></a>
+						onclick="self.location.href = answer/edit.do?answerId=${row.id}&questionId=${param.questionId}" /></a>
 				</display:column>
-				
-				<display:column>
-					<a href="urldelete"><input
-						class="btn btn-default" type="button"
-						value="<spring:message code="answer.delete"/>"
-						onclick="self.location.href = answer/administrator/edit.do?answerId=${row.id}" /></a>
-				</display:column>
-
-
 
 			</display:table>
 			<jstl:if test="${!other }">
-				<a href="answer/administrator/create.do"><input type="button"
+				<a href="answer/create.do?questionId=${param.questionId}"><input type="button"
 					class="btn btn-default"
 					value="<spring:message code="answer.create"/>"
-					onclick="self.location.href = answer/administrator/create.do" /></a>
+					onclick="self.location.href = answer/create.do?questionId=${param.questionId}" /></a>
 			</jstl:if>
 			<%-- 
 			<jstl:if test="${other }">

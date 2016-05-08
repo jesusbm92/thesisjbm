@@ -1,5 +1,6 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import domain.Answer;
+import domain.Exercise;
+import domain.Metadata;
 
 import repositories.AnswerRepository;
 
@@ -75,7 +78,9 @@ public class AnswerService {
 	 */
 	public void delete(Answer answer) {
 		Assert.notNull(answer);
-		// TODO Restricciones de Borrado
+		
+		answer.getQuestion().getAnswers().remove(answer);
+		answer.setQuestion(null);
 
 		answerRepository.delete(answer);
 	}
