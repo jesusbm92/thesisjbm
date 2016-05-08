@@ -157,10 +157,8 @@ public class ExerciseController {
 			exercise.getExams().add(exam);
 			exam.getExercises().add(exercise);
 			exerciseService.save(exercise);
-			String uri = "exercise/listByExam";
-			String requestURI = "exercise/listByExam.do";
-			result = createListModelAndView(requestURI, exam.getExercises(),
-					uri);
+			result = new ModelAndView("redirect:listByExam.do?examId="
+					+ examId);
 		} catch (Throwable oops) {
 			if (exercise.getId() == 0) {
 				redirect.addFlashAttribute("successMessage",

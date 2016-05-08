@@ -32,6 +32,9 @@
 		
 		<bean class="converters.MetadataToStringConverter" />
 		<bean class="converters.StringToMetadataConverter" />
+		
+		<bean class="converters.StatisticToStringConverter" />
+		<bean class="converters.StringToStatisticConverter" />
 	</util:list>
 	
 </beans>

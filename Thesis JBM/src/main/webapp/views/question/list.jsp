@@ -55,32 +55,37 @@
 					</jstl:forEach>
 				</display:column>
 				<display:column>
-					<a href="question/administrator/edit.do?questionId=${row.id}"><input
+					<a
+						href="question/edit.do?questionId=${row.id}&exerciseId=${param.exerciseId}"><input
 						class="btn btn-default" type="button"
 						value="<spring:message code="question.edit"/>"
-						onclick="self.location.href = question/administrator/edit.do?questionId=${row.id}" /></a>
+						onclick="self.location.href = question/edit.do?questionId=${row.id}&exerciseId=${param.exerciseId}" /></a>
 				</display:column>
 
-				<display:column>
-					<a href="urldelete"><input class="btn btn-default"
-						type="button" value="<spring:message code="question.delete"/>"
-						onclick="self.location.href = question/administrator/edit.do?questionId=${row.id}" /></a>
-				</display:column>
+				<jstl:if test="${pickToCopy }">
+					<display:column>
+						<a
+							href="question/createFromParent.do?questionId=${row.id}&exerciseId=${param.exerciseId}"><input
+							class="btn btn-default" type="button"
+							value="<spring:message code="question.create.parent"/>"
+							onclick="self.location.href = question/createFromParent.do?questionId=${row.id}&exerciseId=${param.exerciseId}" /></a>
+					</display:column>
+				</jstl:if>
 
 
 
 			</display:table>
-			<jstl:if test="${!other }">
+			<jstl:if test="${!pickToCopy }">
 				<a href="question/create.do?exerciseId=${param.exerciseId }"><input type="button"
 					class="btn btn-default"
 					value="<spring:message code="question.create"/>"
 					onclick="self.location.href = question/create.do?exerciseId=${param.exerciseId }" /></a>
 			</jstl:if>
-			<jstl:if test="${!other }">
-				<a href="question/create.do?exerciseId=${param.exerciseId }"><input type="button"
+			<jstl:if test="${!pickToCopy }">
+				<a href="question/allToPick.do?exerciseId=${param.exerciseId }"><input type="button"
 					class="btn btn-default"
 					value="<spring:message code="question.create.parent"/>"
-					onclick="self.location.href = question/create.do?exerciseId=${param.exerciseId }" /></a>
+					onclick="self.location.href = question/allToPick.do?exerciseId=${param.exerciseId }" /></a>
 			</jstl:if>
 			<%-- 
 			<jstl:if test="${other }">

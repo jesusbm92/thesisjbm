@@ -8,12 +8,15 @@ import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
@@ -106,7 +109,7 @@ public class Question extends DomainEntity {
 
 	@Valid
 	@NotNull
-	@OneToOne(cascade = CascadeType.ALL, optional = true)
+	@OneToOne(cascade = CascadeType.ALL)
 	public Statistic getStatistic() {
 		return statistic;
 	}
@@ -126,7 +129,8 @@ public class Question extends DomainEntity {
 
 	@Valid
 	@NotNull
-	@ManyToMany(cascade=CascadeType.PERSIST)
+	@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
+	@Fetch(FetchMode.SELECT)
 	public Collection<Metadata> getMetadata() {
 		return metadata;
 	}
@@ -137,7 +141,8 @@ public class Question extends DomainEntity {
 
 	@Valid
 	@NotNull
-	@OneToMany(mappedBy = "question" ,cascade=CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "question" ,cascade=CascadeType.ALL)
+	@Fetch(FetchMode.SELECT)
 	public Collection<Answer> getAnswers() {
 		return answers;
 	}
