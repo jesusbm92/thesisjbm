@@ -68,6 +68,8 @@
 			<security:authorize access="isAnonymous()">
 				<li class="dropdown"><a class="fNiv" href="security/login.do"><spring:message
 							code="master.page.login" /></a></li>
+				<li class="dropdown"><a class="fNiv" href="register/registerUser.do"><spring:message
+							code="master.page.register" /></a></li>
 			</security:authorize>
 
 			<security:authorize access="isAuthenticated()">

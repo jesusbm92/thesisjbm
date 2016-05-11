@@ -26,6 +26,8 @@
 		<value>/views/question/messages</value>
 		<value>/views/answer/messages</value>
 		<value>/views/metadata/messages</value>
+		<value>/views/register/messages</value>
+
 	</util:list>
 
 </beans>

@@ -58,6 +58,8 @@
 		<security:intercept-url pattern="/answer/**" access="isAuthenticated()" /> 
 		<security:intercept-url pattern="/metadata/**" access="isAuthenticated()" /> 
 		
+		<security:intercept-url pattern="/register/**" access="permitAll" /> 
+		
 		
 	
 		<security:intercept-url pattern="/**" access="hasRole('NONE')" />

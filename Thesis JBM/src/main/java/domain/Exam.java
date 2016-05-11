@@ -11,6 +11,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
@@ -30,10 +31,21 @@ public class Exam extends DomainEntity {
 
 	// Relationship
 	private Collection<Exercise> exercises;
+	private User owner;
 
 	public Exam() {
 		super();
 		exercises = new ArrayList<Exercise>();
+	}
+
+	@Valid
+	@ManyToOne(optional = true)
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 
 	@Valid

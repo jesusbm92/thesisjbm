@@ -35,6 +35,9 @@
 		
 		<bean class="converters.StatisticToStringConverter" />
 		<bean class="converters.StringToStatisticConverter" />
+		
+		<bean class="converters.UserToStringConverter" />
+		<bean class="converters.StringToUserConverter" />
 	</util:list>
 	
 </beans>
