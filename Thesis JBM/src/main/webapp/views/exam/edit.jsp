@@ -14,19 +14,6 @@ body {
 	padding-top: 20px;
 }
 </style>
-
-<script type="text/javascript">
-
-            function addExercise(exam){
-            	Exercise e = new Exercise();
-            	e.setName("A");
-            	e.setText("B");
-            	exam.getExercises().add(e);
-            	e.getExams().add(exam);
-            	
-            }
-        </script>
-
 <div class="container">
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
@@ -39,6 +26,7 @@ body {
 					<form:hidden path="difficulty" />
 					<form:hidden path="date" />
 					<form:hidden path="exercises" />
+					<form:hidden path="owner"/>
 
 
 					<fieldset>

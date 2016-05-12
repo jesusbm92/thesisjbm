@@ -53,6 +53,12 @@
 
 	<!-- Other domain beans come here -->
 
+	<bean id="user1" class="domain.User">
+		<property name="name" value="Jesus B" />
+		<property name="email" value="e@e.com" />
+		<property name="userAccount" ref="userAccount2" />
+	</bean>
+
 	<bean id="metadata1" class="domain.Metadata">
 		<property name="name" value="Metadata1" />
 		<property name="questions">
@@ -77,7 +83,7 @@
 		<property name="difficulty" value="8.4" />
 		<property name="xml" value="test" />
 		<property name="weight" value="1.0" />
-		<property name="weightfail" value = "0.0" />
+		<property name="weightfail" value="0.0" />
 		<property name="exercises">
 			<list>
 				<ref bean="exercise1" />
@@ -102,8 +108,8 @@
 		<property name="percentage" value="8.4" />
 		<property name="question" ref="question1" />
 	</bean>
-	
-		<bean id="answer1" class="domain.Answer">
+
+	<bean id="answer1" class="domain.Answer">
 		<property name="name" value="Answer1" />
 		<property name="isCorrect" value="true" />
 		<property name="text" value="AnswerText1" />
@@ -144,6 +150,7 @@
 				<ref bean="exercise1" />
 			</list>
 		</property>
+		<property name="owner" ref="user1" />
 	</bean>
 
 

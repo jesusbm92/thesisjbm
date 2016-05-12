@@ -54,13 +54,28 @@
 				</jstl:if>
 					</jstl:forEach>
 				</display:column>
-				<display:column>
-					<a
-						href="question/edit.do?questionId=${row.id}&exerciseId=${param.exerciseId}"><input
-						class="btn btn-default" type="button"
-						value="<spring:message code="question.edit"/>"
-						onclick="self.location.href = question/edit.do?questionId=${row.id}&exerciseId=${param.exerciseId}" /></a>
-				</display:column>
+
+				<jstl:if test="${exam.owner != null}">
+				<jstl:if test="${exam.owner.equals(currentUser) }">
+						<display:column>
+							<a
+								href="question/edit.do?questionId=${row.id}&exerciseId=${param.exerciseId}"><input
+								class="btn btn-default" type="button"
+								value="<spring:message code="question.edit"/>"
+								onclick="self.location.href = question/edit.do?questionId=${row.id}&exerciseId=${param.exerciseId}" /></a>
+						</display:column>
+					</jstl:if>
+				</jstl:if>
+
+				<security:authorize access="hasRole('ADMIN')">
+					<display:column>
+						<a
+							href="question/edit.do?questionId=${row.id}&exerciseId=${param.exerciseId}"><input
+							class="btn btn-default" type="button"
+							value="<spring:message code="question.edit"/>"
+							onclick="self.location.href = question/edit.do?questionId=${row.id}&exerciseId=${param.exerciseId}" /></a>
+					</display:column>
+				</security:authorize>
 
 				<jstl:if test="${pickToCopy }">
 					<display:column>
@@ -75,18 +90,38 @@
 
 
 			</display:table>
-			<jstl:if test="${!pickToCopy }">
-				<a href="question/create.do?exerciseId=${param.exerciseId }"><input type="button"
-					class="btn btn-default"
-					value="<spring:message code="question.create"/>"
-					onclick="self.location.href = question/create.do?exerciseId=${param.exerciseId }" /></a>
+
+			<jstl:if test="${exam.owner != null}">
+				<jstl:if test="${exam.owner.equals(currentUser) }">
+					<jstl:if test="${!pickToCopy }">
+						<a href="question/create.do?exerciseId=${param.exerciseId }"><input
+							type="button" class="btn btn-default"
+							value="<spring:message code="question.create"/>"
+							onclick="self.location.href = question/create.do?exerciseId=${param.exerciseId }" /></a>
+					</jstl:if>
+					<jstl:if test="${!pickToCopy }">
+						<a href="question/allToPick.do?exerciseId=${param.exerciseId }"><input
+							type="button" class="btn btn-default"
+							value="<spring:message code="question.create.parent"/>"
+							onclick="self.location.href = question/allToPick.do?exerciseId=${param.exerciseId }" /></a>
+					</jstl:if>
+
+				</jstl:if>
 			</jstl:if>
-			<jstl:if test="${!pickToCopy }">
-				<a href="question/allToPick.do?exerciseId=${param.exerciseId }"><input type="button"
-					class="btn btn-default"
-					value="<spring:message code="question.create.parent"/>"
-					onclick="self.location.href = question/allToPick.do?exerciseId=${param.exerciseId }" /></a>
-			</jstl:if>
+			<security:authorize access="hasRole('ADMIN')">
+				<jstl:if test="${!pickToCopy }">
+					<a href="question/create.do?exerciseId=${param.exerciseId }"><input
+						type="button" class="btn btn-default"
+						value="<spring:message code="question.create"/>"
+						onclick="self.location.href = question/create.do?exerciseId=${param.exerciseId }" /></a>
+				</jstl:if>
+				<jstl:if test="${!pickToCopy }">
+					<a href="question/allToPick.do?exerciseId=${param.exerciseId }"><input
+						type="button" class="btn btn-default"
+						value="<spring:message code="question.create.parent"/>"
+						onclick="self.location.href = question/allToPick.do?exerciseId=${param.exerciseId }" /></a>
+				</jstl:if>
+			</security:authorize>
 			<%-- 
 			<jstl:if test="${other }">
 				<a href="questionGroup/administrator/list.do" type="button"> <spring:message

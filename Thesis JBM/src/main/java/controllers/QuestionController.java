@@ -22,6 +22,7 @@ import services.AnswerService;
 import services.ExerciseService;
 import services.MetadataService;
 import services.QuestionService;
+import services.UserService;
 import domain.Answer;
 import domain.Exam;
 import domain.Exercise;
@@ -47,6 +48,9 @@ public class QuestionController {
 
 	@Autowired
 	private MetadataService metadataService;
+	
+	@Autowired
+	private UserService userService;
 
 	// Constructor
 	// ---------------------------------------------------------------
@@ -64,6 +68,8 @@ public class QuestionController {
 		String requestURI = "question/list.do";
 		Collection<Question> questions = questionService.findAll();
 		result = createListModelAndView(requestURI, questions, uri);
+		
+		
 
 		return result;
 	}
@@ -79,6 +85,8 @@ public class QuestionController {
 
 		result = createListModelAndView(requestURI, questions, uri);
 
+		result.addObject("exam", exerciseService.findOne(exerciseId).getExams().iterator().next());
+		
 		return result;
 	}
 
@@ -313,6 +321,8 @@ public class QuestionController {
 		result = new ModelAndView(uri);
 		result.addObject("questions", questions);
 		result.addObject("requestURI", requestURI);
+		result.addObject("currentUser", userService.findByPrincipal());
+
 
 		return result;
 	}

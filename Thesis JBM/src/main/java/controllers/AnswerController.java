@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import services.QuestionService;
 import services.AnswerService;
+import services.UserService;
 import domain.Exam;
 import domain.Answer;
 import domain.Answer;
@@ -41,6 +42,9 @@ public class AnswerController {
 
 	@Autowired
 	private QuestionService questionService;
+	
+	@Autowired
+	private UserService userService;
 
 	// Constructor
 	// ---------------------------------------------------------------
@@ -72,6 +76,8 @@ public class AnswerController {
 		
 		result = createListModelAndView(requestURI, answers, uri);
 
+		result.addObject("exam", questionService.findOne(questionId).getExercises().iterator().next().getExams().iterator().next());
+		
 		return result;
 	}
 	
@@ -234,6 +240,8 @@ public class AnswerController {
 			result = new ModelAndView(uri);
 			result.addObject("answers", answers);
 			result.addObject("requestURI", requestURI);
+			result.addObject("currentUser", userService.findByPrincipal());
+
 
 			return result;
 		}

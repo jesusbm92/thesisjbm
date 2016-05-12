@@ -7,6 +7,7 @@
 <%@taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
+<%@page import="security.LoginService"%>
 
 <security:authorize access="isAuthenticated()">
 	<h1 class="text-center">
@@ -37,20 +38,33 @@
 						<a href="exercise/listByExam.do?examId=${row.id }" title='XML'><spring:message
 								code="exam.exercises" /></a>
 					</display:column>
-					<display:column>
-						<a href="exam/edit.do?examId=${row.id}"><input
-							class="btn btn-default" type="button"
-							value="<spring:message code="exam.edit"/>"
-							onclick="self.location.href = exam/edit.do?examId=${row.id}" /></a>
-					</display:column>
+					<jstl:if test="${row.owner != null}">
+						<jstl:if test="${row.owner.equals(currentUser) }">
+							<display:column>
+								<a href="exam/edit.do?examId=${row.id}"><input
+									class="btn btn-default" type="button"
+									value="<spring:message code="exam.edit"/>"
+									onclick="self.location.href = exam/edit.do?examId=${row.id}" /></a>
+							</display:column>
+						</jstl:if>
+					</jstl:if>
 
+
+					<security:authorize access="hasRole('ADMIN')">
+						<display:column>
+							<a href="exam/edit.do?examId=${row.id}"><input
+								class="btn btn-default" type="button"
+								value="<spring:message code="exam.edit"/>"
+								onclick="self.location.href = exam/edit.do?examId=${row.id}" /></a>
+						</display:column>
+					</security:authorize>
 
 
 				</display:table>
-					<a href="exam/create.do"><input type="button"
-						class="btn btn-default"
-						value="<spring:message code="exam.create"/>"
-						onclick="self.location.href = exam/create.do" /></a>
+				<a href="exam/create.do"><input type="button"
+					class="btn btn-default"
+					value="<spring:message code="exam.create"/>"
+					onclick="self.location.href = exam/create.do" /></a>
 				<%-- 
 			<jstl:if test="${other }">
 				<a href="examGroup/administrator/list.do" type="button"> <spring:message

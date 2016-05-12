@@ -26,6 +26,7 @@ import services.AnswerService;
 import services.ExamService;
 import services.ExerciseService;
 import services.QuestionService;
+import services.UserService;
 import domain.Answer;
 import domain.Exam;
 import domain.Exercise;
@@ -48,10 +49,13 @@ public class ExerciseController {
 
 	@Autowired
 	private QuestionService questionService;
-	
+
 	@Autowired
 	private AnswerService answerService;
-	
+
+	@Autowired
+	private UserService userService;
+
 	// Constructor
 	// ---------------------------------------------------------------
 	public ExerciseController() {
@@ -81,7 +85,7 @@ public class ExerciseController {
 		String requestURI = "exercise/listByExam.do";
 
 		result = createListModelAndView(requestURI, exercises, uri);
-
+		result.addObject("exam", examService.findOne(examId));
 		return result;
 	}
 
@@ -95,6 +99,8 @@ public class ExerciseController {
 
 		result = createListModelAndView(requestURI, exercises, uri);
 		result.addObject("pickToCopy", true);
+		result.addObject("exam", examService.findOne(examId));
+
 		return result;
 	}
 
@@ -125,7 +131,7 @@ public class ExerciseController {
 			exercise.setId(0);
 			Collection<Exam> exams = new ArrayList<Exam>();
 			Collection<Question> questions = new ArrayList<Question>();
-			for (Question q: exParent.getQuestions()){
+			for (Question q : exParent.getQuestions()) {
 				Question qst = new Question();
 				qst.setDifficulty(q.getDifficulty());
 				Statistic s = new Statistic();
@@ -142,7 +148,7 @@ public class ExerciseController {
 				qst.getExercises().add(exercise);
 				qst = questionService.save(qst);
 				questions.add(qst);
-				for(Answer a : q.getAnswers()){
+				for (Answer a : q.getAnswers()) {
 					Answer answer = new Answer();
 					BeanUtils.copyProperties(answer, a);
 					answer.setQuestion(qst);
@@ -150,15 +156,14 @@ public class ExerciseController {
 					qst.getAnswers().add(answerService.save(answer));
 				}
 			}
-//			questions.addAll(exParent.getQuestions());
+			// questions.addAll(exParent.getQuestions());
 			exams.addAll(exParent.getExams());
 			exercise.setExams(exams);
 			exercise.setQuestions(questions);
 			exercise.getExams().add(exam);
 			exam.getExercises().add(exercise);
 			exerciseService.save(exercise);
-			result = new ModelAndView("redirect:listByExam.do?examId="
-					+ examId);
+			result = new ModelAndView("redirect:listByExam.do?examId=" + examId);
 		} catch (Throwable oops) {
 			if (exercise.getId() == 0) {
 				redirect.addFlashAttribute("successMessage",
@@ -305,6 +310,7 @@ public class ExerciseController {
 		result = new ModelAndView(uri);
 		result.addObject("exercises", exercises);
 		result.addObject("requestURI", requestURI);
+		result.addObject("currentUser", userService.findByPrincipal());
 
 		return result;
 	}

@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import services.ExamService;
 import services.ExerciseService;
+import services.UserService;
 import domain.Exam;
 import domain.Exercise;
 import domain.Exam;
@@ -37,6 +38,9 @@ public class ExamController {
 
 	@Autowired
 	private ExerciseService exerciseService;
+	
+	@Autowired
+	private UserService userService;
 	
 	// Constructor
 	// ---------------------------------------------------------------
@@ -113,6 +117,9 @@ public class ExamController {
 				exam.setDifficulty("?");
 				exam.setDate(new Date());
 				exam.setXml("");
+				if(userService.IAmAUser()){
+					exam.setOwner(userService.findByPrincipal());
+				}
 				examService.save(exam);
 				result = new ModelAndView("redirect:list.do");
 			} catch (Throwable oops) {
@@ -189,6 +196,7 @@ public class ExamController {
 		result.addObject("allexercises", exercises);
 		result.addObject("exam", exam);
 		result.addObject("message", message);
+		result.addObject("currentUser", userService.findByPrincipal());
 
 		return result;
 	}
@@ -202,6 +210,8 @@ public class ExamController {
 		result.addObject("create", true);
 		result.addObject("exam", exam);
 		result.addObject("message", message);
+		result.addObject("currentUser", userService.findByPrincipal());
+
 
 		return result;
 	}
@@ -213,6 +223,8 @@ public class ExamController {
 		result = new ModelAndView(uri);
 		result.addObject("exams", exams);
 		result.addObject("requestURI", requestURI);
+		result.addObject("currentUser", userService.findByPrincipal());
+
 
 		return result;
 	}
@@ -224,6 +236,8 @@ public class ExamController {
 		result = new ModelAndView(uri);
 		result.addObject("exam", exam);
 		result.addObject("requestURI", requestURI);
+		result.addObject("currentUser", userService.findByPrincipal());
+
 
 		return result;
 	}
