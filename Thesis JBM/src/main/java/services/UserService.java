@@ -182,7 +182,7 @@ public class UserService {
 		user.setEmail(userForm.getEmail());
 		user.setId(userForm.getId());
 		user.setName(userForm.getName());
-		user.setVersion(userForm.getVersion());
+		user.setVersion(0);
 		user.getUserAccount().setPassword(userForm.getPassword());
 		user.getUserAccount().setUsername(userForm.getUsername());
 

@@ -38,16 +38,17 @@
 						<a href="exercise/listByExam.do?examId=${row.id }" title='XML'><spring:message
 								code="exam.exercises" /></a>
 					</display:column>
-					<jstl:if test="${row.owner != null}">
-						<jstl:if test="${row.owner.equals(currentUser) }">
-							<display:column>
-								<a href="exam/edit.do?examId=${row.id}"><input
-									class="btn btn-default" type="button"
-									value="<spring:message code="exam.edit"/>"
-									onclick="self.location.href = exam/edit.do?examId=${row.id}" /></a>
-							</display:column>
-						</jstl:if>
+					<jstl:if test="${row.owners != null}">
+						<display:column>
+								<jstl:if test="${row.getOwners().contains(currentUser) }">
+									<a href="exam/edit.do?examId=${row.id}"><input
+										class="btn btn-default" type="button"
+										value="<spring:message code="exam.edit"/>"
+										onclick="self.location.href = exam/edit.do?examId=${row.id}" /></a>
+								</jstl:if>
+					</display:column>
 					</jstl:if>
+		
 
 
 					<security:authorize access="hasRole('ADMIN')">

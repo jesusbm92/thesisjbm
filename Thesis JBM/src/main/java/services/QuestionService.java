@@ -79,21 +79,20 @@ public class QuestionService {
 	 */
 	public void delete(Question question) {
 		Assert.notNull(question);
-		for (Exercise e : question.getExercises()) {
-			e.getQuestions().remove(question);
-		}
 
-		for (Metadata m : question.getMetadata()) {
-			m.getQuestions().remove(question);
-		}
-
-		if (question.getExercises().size() == 0) {
-			question.setExercises(new ArrayList<Exercise>());
+		if (question.getMetadata() == null) {
 			question.setMetadata(new ArrayList<Metadata>());
-			questionRepository.delete(question);
 		} else {
-			questionRepository.save(question);
+			for (Metadata m : question.getMetadata()) {
+				m.getQuestions().remove(question);
+			}
+
 		}
+		question.getExercise().getQuestions().remove(question);
+		question.setExercise(null);
+
+		questionRepository.delete(question);
+
 	}
 
 	public Collection<Question> findByExerciseId(int exerciseId) {

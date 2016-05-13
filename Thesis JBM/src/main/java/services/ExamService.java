@@ -94,11 +94,6 @@ public class ExamService {
 		public void delete(Exam exam) {
 			Assert.notNull(exam);
 			// TODO Restricciones de Borrado
-
-			for (Exercise q: exam.getExercises()){
-				q.getExams().remove(exam);				
-			}
-			exam.setExercises(new ArrayList<Exercise>());			
 			examRepository.delete(exam);
 		}
 

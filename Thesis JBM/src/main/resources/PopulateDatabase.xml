@@ -76,6 +76,35 @@
 			</list>
 		</property>
 	</bean>
+	
+		<bean id="exam1" class="domain.Exam">
+		<property name="name" value="Exam1" />
+		<property name="date" value="20/03/2016" />
+		<property name="difficulty" value="8.4" />
+		<property name="xml" value="test" />
+		<property name="exercises">
+			<list>
+				<ref bean="exercise1" />
+			</list>
+		</property>
+		<property name="owners">
+			<list>
+				<ref bean="user1" />
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="exercise1" class="domain.Exercise">
+		<property name="name" value="Exercise1" />
+		<property name="text" value="This is the text for exercise 1" />
+		<property name="exam" ref="exam1"/>
+		<property name="questions">
+			<list>
+				<ref bean="question1" />
+			</list>
+		</property>
+	</bean>
 
 	<bean id="question1" class="domain.Question">
 		<property name="name" value="Question1" />
@@ -84,11 +113,7 @@
 		<property name="xml" value="test" />
 		<property name="weight" value="1.0" />
 		<property name="weightfail" value="0.0" />
-		<property name="exercises">
-			<list>
-				<ref bean="exercise1" />
-			</list>
-		</property>
+		<property name="exercise" ref="exercise1"/>
 		<property name="metadata">
 			<list>
 				<ref bean="metadata1" />
@@ -125,33 +150,7 @@
 		<property name="question" ref="question1" />
 	</bean>
 
-	<bean id="exercise1" class="domain.Exercise">
-		<property name="name" value="Exercise1" />
-		<property name="text" value="This is the text for exercise 1" />
-		<property name="exams">
-			<list>
-				<ref bean="exam1" />
-			</list>
-		</property>
-		<property name="questions">
-			<list>
-				<ref bean="question1" />
-			</list>
-		</property>
-	</bean>
 
-	<bean id="exam1" class="domain.Exam">
-		<property name="name" value="Exam1" />
-		<property name="date" value="20/03/2016" />
-		<property name="difficulty" value="8.4" />
-		<property name="xml" value="test" />
-		<property name="exercises">
-			<list>
-				<ref bean="exercise1" />
-			</list>
-		</property>
-		<property name="owner" ref="user1" />
-	</bean>
 
 
 

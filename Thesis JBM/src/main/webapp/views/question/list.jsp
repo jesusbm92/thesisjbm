@@ -55,17 +55,17 @@
 					</jstl:forEach>
 				</display:column>
 
-				<jstl:if test="${exam.owner != null}">
-				<jstl:if test="${exam.owner.equals(currentUser) }">
 						<display:column>
+				<jstl:if test="${row.owner != null}">
+				<jstl:if test="${row.owner.equals(currentUser) }">
 							<a
 								href="question/edit.do?questionId=${row.id}&exerciseId=${param.exerciseId}"><input
 								class="btn btn-default" type="button"
 								value="<spring:message code="question.edit"/>"
 								onclick="self.location.href = question/edit.do?questionId=${row.id}&exerciseId=${param.exerciseId}" /></a>
-						</display:column>
 					</jstl:if>
 				</jstl:if>
+						</display:column>
 
 				<security:authorize access="hasRole('ADMIN')">
 					<display:column>
@@ -91,8 +91,8 @@
 
 			</display:table>
 
-			<jstl:if test="${exam.owner != null}">
-				<jstl:if test="${exam.owner.equals(currentUser) }">
+			<jstl:if test="${exam.owners != null}">
+				<jstl:if test="${exam.owners.contains(currentUser) }">
 					<jstl:if test="${!pickToCopy }">
 						<a href="question/create.do?exerciseId=${param.exerciseId }"><input
 							type="button" class="btn btn-default"

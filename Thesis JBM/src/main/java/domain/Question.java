@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.Valid;
@@ -31,17 +32,27 @@ public class Question extends DomainEntity {
 	private Double weightfail;
 
 	// Relationship
-	private Collection<Exercise> exercises;
+	private Exercise exercise;
 	private Statistic statistic;
 	private Collection<Metadata> metadata;
 	private Collection<Answer> answers;
+	private User owner;
 
 	public Question() {
 		super();
-		exercises = new ArrayList<Exercise>();
 		metadata = new ArrayList<Metadata>();
 		answers = new ArrayList<Answer>();
 
+	}
+	
+	@Valid
+	@ManyToOne(optional = true)
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 
 	@Valid
@@ -98,13 +109,13 @@ public class Question extends DomainEntity {
 
 	@Valid
 	@NotNull
-	@ManyToMany(mappedBy = "questions")
-	public Collection<Exercise> getExercises() {
-		return exercises;
+	@ManyToOne(optional = false)
+	public Exercise getExercise() {
+		return exercise;
 	}
 
-	public void setExercises(Collection<Exercise> exercises) {
-		this.exercises = exercises;
+	public void setExercise(Exercise exercises) {
+		this.exercise = exercises;
 	}
 
 	@Valid

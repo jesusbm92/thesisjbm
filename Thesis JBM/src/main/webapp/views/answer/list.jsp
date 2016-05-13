@@ -30,18 +30,21 @@
 				<display:column property="penalty" titleKey="answer.penalty"
 					sortable="true" />
 
-				<jstl:if test="${exam.owner != null}">
-					<jstl:if test="${exam.owner.equals(currentUser) }">
-						<display:column>
-							<a
-								href="answer/edit.do?answerId=${row.id}&questionId=${param.questionId}"><input
-								class="btn btn-default" type="button"
-								value="<spring:message code="answer.edit"/>"
-								onclick="self.location.href = answer/edit.do?answerId=${row.id}&questionId=${param.questionId}" /></a>
-						</display:column>
+				<security:authorize access="hasRole('CUSTOMER')">
 
+					<jstl:if test="${exam.owner != null}">
+						<jstl:if test="${exam.owner.equals(currentUser) }">
+							<display:column>
+								<a
+									href="answer/edit.do?answerId=${row.id}&questionId=${param.questionId}"><input
+									class="btn btn-default" type="button"
+									value="<spring:message code="answer.edit"/>"
+									onclick="self.location.href = answer/edit.do?answerId=${row.id}&questionId=${param.questionId}" /></a>
+							</display:column>
+
+						</jstl:if>
 					</jstl:if>
-				</jstl:if>
+				</security:authorize>
 				<security:authorize access="hasRole('ADMIN')">
 					<display:column>
 						<a
@@ -54,16 +57,18 @@
 				</security:authorize>
 
 			</display:table>
-			<jstl:if test="${exam.owner != null}">
-				<jstl:if test="${exam.owner.equals(currentUser) }">
-					<jstl:if test="${!other }">
-						<a href="answer/create.do?questionId=${param.questionId}"><input
-							type="button" class="btn btn-default"
-							value="<spring:message code="answer.create"/>"
-							onclick="self.location.href = answer/create.do?questionId=${param.questionId}" /></a>
+			<security:authorize access="hasRole('CUSTOMER')">
+				<jstl:if test="${exam.owner != null}">
+					<jstl:if test="${exam.owner.equals(currentUser) }">
+						<jstl:if test="${!other }">
+							<a href="answer/create.do?questionId=${param.questionId}"><input
+								type="button" class="btn btn-default"
+								value="<spring:message code="answer.create"/>"
+								onclick="self.location.href = answer/create.do?questionId=${param.questionId}" /></a>
+						</jstl:if>
 					</jstl:if>
 				</jstl:if>
-			</jstl:if>
+			</security:authorize>
 
 			<security:authorize access="hasRole('ADMIN')">
 				<a href="answer/create.do?questionId=${param.questionId}"><input

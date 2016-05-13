@@ -34,7 +34,7 @@
 
 				<jstl:if test="${exam != null}">
 					<jstl:if
-						test="${exam.owner.equals(currentUser) }">
+						test="${exam.owners.contains(currentUser) }">
 						<display:column>
 							<a
 								href="exercise/edit.do?exerciseId=${row.id}&examId=${param.examId}"><input
@@ -71,9 +71,9 @@
 			</display:table>
 
 			<jstl:if test="${!pickToCopy }">
-				<jstl:if test="${exam.owner != null}">
+				<jstl:if test="${exam.owners != null}">
 					<jstl:if
-						test="${exam.owner.equals(currentUser) }">
+						test="${exam.owners.contains(currentUser) }">
 						<a href="exercise/create.do?examId=${param.examId }"><input
 							type="button" class="btn btn-default"
 							value="<spring:message code="exercise.create"/>"

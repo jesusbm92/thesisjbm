@@ -78,23 +78,12 @@ public class ExerciseService {
 	 */
 	public void delete(Exercise exercise) {
 		Assert.notNull(exercise);
-		// TODO Restricciones de Borrado
 
-		for (Question q : exercise.getQuestions()) {
-			q.getExercises().remove(exercise);
-		}
+		exercise.getExam().getExercises().remove(exercise);
+		exercise.setExam(null);
 
-		for (Exam e : exercise.getExams()) {
-			e.getExercises().remove(exercise);
-		}
+		exerciseRepository.delete(exercise);
 
-		if (exercise.getExams().size() == 0) {
-			exercise.setQuestions(new ArrayList<Question>());
-			exercise.setExams(new ArrayList<Exam>());
-			exerciseRepository.delete(exercise);
-		} else {
-			exerciseRepository.save(exercise);
-		}
 	}
 
 	public Collection<Exercise> findByExamId(int examId) {

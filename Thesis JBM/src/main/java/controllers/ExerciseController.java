@@ -129,10 +129,9 @@ public class ExerciseController {
 			Exam exam = examService.findOne(examId);
 			BeanUtils.copyProperties(exercise, exParent);
 			exercise.setId(0);
-			Collection<Exam> exams = new ArrayList<Exam>();
 			Collection<Question> questions = new ArrayList<Question>();
+			Question qst = new Question();
 			for (Question q : exParent.getQuestions()) {
-				Question qst = new Question();
 				qst.setDifficulty(q.getDifficulty());
 				Statistic s = new Statistic();
 				s.setQuestion(qst);
@@ -143,26 +142,26 @@ public class ExerciseController {
 				qst.setWeight(q.getWeight());
 				qst.setWeightfail(q.getWeightfail());
 				qst.setXml(q.getXml());
+				if (userService.IAmAUser()) {
+					qst.setOwner(userService.findByPrincipal());
+				}
 				Collection<Metadata> metadatas = new ArrayList<Metadata>();
 				metadatas.addAll(q.getMetadata());
-				qst.getExercises().add(exercise);
-				qst = questionService.save(qst);
+				qst.setExercise(exercise);
 				questions.add(qst);
 				for (Answer a : q.getAnswers()) {
 					Answer answer = new Answer();
 					BeanUtils.copyProperties(answer, a);
 					answer.setQuestion(qst);
 					answer.setId(0);
-					qst.getAnswers().add(answerService.save(answer));
+					qst.getAnswers().add(answer);
 				}
 			}
 			// questions.addAll(exParent.getQuestions());
-			exams.addAll(exParent.getExams());
-			exercise.setExams(exams);
 			exercise.setQuestions(questions);
-			exercise.getExams().add(exam);
-			exam.getExercises().add(exercise);
+			exercise.setExam(exam);
 			exerciseService.save(exercise);
+//			qst = questionService.save(qst);
 			result = new ModelAndView("redirect:listByExam.do?examId=" + examId);
 		} catch (Throwable oops) {
 			if (exercise.getId() == 0) {
@@ -200,7 +199,7 @@ public class ExerciseController {
 			RedirectAttributes redirect) {
 		ModelAndView result;
 
-		if (binding.hasErrors()) {
+		if (binding.hasErrors() && exercise.getExam()!= null) {
 			if (exercise.getId() == 0) {
 				result = createCreateModelAndView(exercise,
 						"exercise.commit.error");
@@ -210,10 +209,9 @@ public class ExerciseController {
 			}
 		} else {
 			try {
-				if (exercise.getExams().size() == 0) {
+				if (exercise.getExam()==null) {
 					Exam exam = examService.findOne(examId);
-					exercise.getExams().add(exam);
-					exam.getExercises().add(exercise);
+					exercise.setExam(exam);
 				}
 				exerciseService.save(exercise);
 				result = new ModelAndView("redirect:listByExam.do?examId="
@@ -310,8 +308,9 @@ public class ExerciseController {
 		result = new ModelAndView(uri);
 		result.addObject("exercises", exercises);
 		result.addObject("requestURI", requestURI);
-		result.addObject("currentUser", userService.findByPrincipal());
-
+		if (userService.IAmAUser()) {
+			result.addObject("currentUser", userService.findByPrincipal());
+		}
 		return result;
 	}
 

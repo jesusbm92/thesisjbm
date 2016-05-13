@@ -26,7 +26,6 @@ body {
 					<form:hidden path="difficulty" />
 					<form:hidden path="date" />
 					<form:hidden path="exercises" />
-					<form:hidden path="owner"/>
 
 
 					<fieldset>
@@ -44,6 +43,14 @@ body {
 							</div>
 							<form:errors path="name" cssClass="error" />
 						</div>
+
+						<form:label path="owners" class="col-md-3 control-label" for="owners">
+							<spring:message code="exam.users" />
+						</form:label>
+						<form:select multiple="${users.size()}" items="${users}"
+							itemLabel="name" id="id" code="exam.users" path="owners"
+							class="form-control multiselect" />
+						<form:errors path="owners" cssClass="error" />
 
 						<br />
 						<div class="form-group">
@@ -83,10 +90,10 @@ body {
 										</div>
 									</div>
 								</jstl:if>
-<!-- 								<a href="exam/list.do"><input type="button" -->
-<!-- 									class="btn btn-primary btn-lg" -->
-<%-- 									value="<spring:message code="exam.cancel"/>" id="cancelar" --%>
-<!-- 									name="cancelar" onclick="self.location.href = exam/list" /></a> -->
+								<!-- 								<a href="exam/list.do"><input type="button" -->
+								<!-- 									class="btn btn-primary btn-lg" -->
+								<%-- 									value="<spring:message code="exam.cancel"/>" id="cancelar" --%>
+								<!-- 									name="cancelar" onclick="self.location.href = exam/list" /></a> -->
 							</div>
 						</div>
 					</fieldset>

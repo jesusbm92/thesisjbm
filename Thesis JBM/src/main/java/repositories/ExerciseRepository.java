@@ -11,7 +11,7 @@ import domain.Exercise;
 @Repository
 public interface ExerciseRepository extends JpaRepository<Exercise, Integer> {
 
-	@Query("select e from Exercise e JOIN e.exams ex where ex.id=?1")
+	@Query("select e from Exercise e where e.exam.id=?1")
 	Collection<Exercise> findByExamId(int examId);
 
 	

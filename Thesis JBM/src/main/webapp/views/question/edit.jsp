@@ -30,9 +30,10 @@ body {
 					<form:hidden path="statistic" />
 					
 					<form:hidden path="answers" />
-					<form:hidden path="exercises" />
+					<form:hidden path="exercise" />
 					<form:hidden path="xml" />
 					<form:hidden path="difficulty" />
+					<form:hidden path="owner"/>
 
 
 

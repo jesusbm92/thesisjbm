@@ -24,7 +24,7 @@ body {
 					<form:hidden path="id" />
 					<form:hidden path="version" />
 					<form:hidden path="questions" />
-					<form:hidden path="exams" />
+					<form:hidden path="exam" />
 
 					<fieldset>
 						<br />

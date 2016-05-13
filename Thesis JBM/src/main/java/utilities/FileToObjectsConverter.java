@@ -110,7 +110,7 @@ public class FileToObjectsConverter {
 					Exercise exercise = new Exercise();
 					// Date
 					e.getExercises().add(exercise);
-					exercise.getExams().add(e);
+					exercise.setExam(e);
 					// Setting exercise name
 					exercise.setName(sCurrentLine.substring(
 							sCurrentLine.indexOf("E"),
@@ -147,7 +147,7 @@ public class FileToObjectsConverter {
 					// Text finished, now question
 					Question question = new Question();
 					exercise.getQuestions().add(question);
-					question.getExercises().add(exercise);
+					question.setExercise(exercise);
 					// Search for the first line "PREGUNTA 1XX"
 					while (!(sCurrentLine.contains("PREGUNTA") && !sCurrentLine
 							.contains("ESCOGE"))) {
@@ -393,12 +393,12 @@ public class FileToObjectsConverter {
 //					for (Metadata m : metadatas) {
 //						databaseUtil.persist(m);
 //					}
+					databaseUtil.persist(e);
+					databaseUtil.persist(exercise);
 					databaseUtil.persist(question);
 					for (Answer a : answers) {
 						databaseUtil.persist(a);
 					}
-					databaseUtil.persist(e);
-					databaseUtil.persist(exercise);
 
 					databaseUtil.commitTransaction();
 				}

@@ -10,13 +10,17 @@ import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -31,21 +35,23 @@ public class Exam extends DomainEntity {
 
 	// Relationship
 	private Collection<Exercise> exercises;
-	private User owner;
+	private Collection<User> owners;
 
 	public Exam() {
 		super();
 		exercises = new ArrayList<Exercise>();
+		owners = new ArrayList<User>();
+
 	}
 
 	@Valid
-	@ManyToOne(optional = true)
-	public User getOwner() {
-		return owner;
+	@ManyToMany(fetch = FetchType.EAGER)
+	public Collection<User> getOwners() {
+		return owners;
 	}
 
-	public void setOwner(User owner) {
-		this.owner = owner;
+	public void setOwners(Collection<User> owners) {
+		this.owners = owners;
 	}
 
 	@Valid
@@ -91,7 +97,7 @@ public class Exam extends DomainEntity {
 
 	@Valid
 	@NotNull
-	@ManyToMany (cascade=CascadeType.PERSIST)
+	@OneToMany (mappedBy= "exam", cascade=CascadeType.ALL)
 	public Collection<Exercise> getExercises() {
 		return exercises;
 	}

@@ -21,11 +21,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import services.ExamService;
 import services.ExerciseService;
 import services.UserService;
+import utilities.FileToObjectsConverter;
 import domain.Exam;
 import domain.Exercise;
 import domain.Exam;
 import domain.Exam;
 import domain.Question;
+import domain.User;
 
 @Controller
 @RequestMapping("/exam")
@@ -38,10 +40,10 @@ public class ExamController {
 
 	@Autowired
 	private ExerciseService exerciseService;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	// Constructor
 	// ---------------------------------------------------------------
 	public ExamController() {
@@ -106,7 +108,7 @@ public class ExamController {
 			RedirectAttributes redirect) {
 		ModelAndView result;
 
-		if (binding.hasErrors()) {
+		if (binding.hasErrors() && exam.getOwners() != null) {
 			if (exam.getId() == 0) {
 				result = createCreateModelAndView(exam, "exam.commit.error");
 			} else {
@@ -117,8 +119,13 @@ public class ExamController {
 				exam.setDifficulty("?");
 				exam.setDate(new Date());
 				exam.setXml("");
-				if(userService.IAmAUser()){
-					exam.setOwner(userService.findByPrincipal());
+				if (userService.IAmAUser()) {
+					if (exam.getOwners() == null) {
+						exam.setOwners(new ArrayList<User>());
+						exam.getOwners().add(userService.findByPrincipal());
+					} else {
+						exam.getOwners().add(userService.findByPrincipal());
+					}
 				}
 				examService.save(exam);
 				result = new ModelAndView("redirect:list.do");
@@ -177,7 +184,7 @@ public class ExamController {
 		result = createCreateModelAndView(exam, null);
 		return result;
 	}
-	
+
 	protected ModelAndView createCreateWithDataModelAndView(Exam exam) {
 		assert exam != null;
 
@@ -191,27 +198,39 @@ public class ExamController {
 	protected ModelAndView createEditModelAndView(Exam exam, String message) {
 		assert exam != null;
 		Collection<Exercise> exercises = exerciseService.findAll();
+		Collection<User> users = userService.findAll();
+		if (userService.IAmAUser()) {
+			users.remove(userService.findByPrincipal());
+		}
 		ModelAndView result;
 		result = new ModelAndView("exam/edit");
 		result.addObject("allexercises", exercises);
 		result.addObject("exam", exam);
+		result.addObject("users", users);
 		result.addObject("message", message);
-		result.addObject("currentUser", userService.findByPrincipal());
-
+		if (userService.IAmAUser()) {
+			result.addObject("currentUser", userService.findByPrincipal());
+		}
 		return result;
 	}
 
 	protected ModelAndView createCreateModelAndView(Exam exam, String message) {
 		assert exam != null;
 		Collection<Exercise> exercises = exerciseService.findAll();
+		Collection<User> users = userService.findAll();
+		if (userService.IAmAUser()) {
+			users.remove(userService.findByPrincipal());
+		}
 		ModelAndView result;
 		result = new ModelAndView("exam/create");
 		result.addObject("allexercises", exercises);
 		result.addObject("create", true);
 		result.addObject("exam", exam);
+		result.addObject("users", users);
 		result.addObject("message", message);
-		result.addObject("currentUser", userService.findByPrincipal());
-
+		if (userService.IAmAUser()) {
+			result.addObject("currentUser", userService.findByPrincipal());
+		}
 
 		return result;
 	}
@@ -223,8 +242,10 @@ public class ExamController {
 		result = new ModelAndView(uri);
 		result.addObject("exams", exams);
 		result.addObject("requestURI", requestURI);
-		result.addObject("currentUser", userService.findByPrincipal());
-
+		if (userService.IAmAUser()) {
+			User currentUser = userService.findByPrincipal();
+			result.addObject("currentUser", currentUser);
+		}
 
 		return result;
 	}
@@ -236,9 +257,9 @@ public class ExamController {
 		result = new ModelAndView(uri);
 		result.addObject("exam", exam);
 		result.addObject("requestURI", requestURI);
-		result.addObject("currentUser", userService.findByPrincipal());
-
-
+		if (userService.IAmAUser()) {
+			result.addObject("currentUser", userService.findByPrincipal());
+		}
 		return result;
 	}
 

@@ -75,8 +75,9 @@ public class AnswerController {
 		String requestURI = "answer/listByQuestion.do";
 		
 		result = createListModelAndView(requestURI, answers, uri);
-
-		result.addObject("exam", questionService.findOne(questionId).getExercises().iterator().next().getExams().iterator().next());
+		Question q = questionService.findOne(questionId);
+		
+		result.addObject("exam", q);
 		
 		return result;
 	}
@@ -240,8 +241,9 @@ public class AnswerController {
 			result = new ModelAndView(uri);
 			result.addObject("answers", answers);
 			result.addObject("requestURI", requestURI);
-			result.addObject("currentUser", userService.findByPrincipal());
-
+			if (userService.IAmAUser()) {
+				result.addObject("currentUser", userService.findByPrincipal());
+			}
 
 			return result;
 		}

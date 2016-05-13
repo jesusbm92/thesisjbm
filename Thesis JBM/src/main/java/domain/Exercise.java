@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -25,12 +27,11 @@ public class Exercise extends DomainEntity{
 	private String text;
 	
 	//Relationship
-	private Collection<Exam> exams;
+	private Exam exam;
 	private Collection<Question> questions;
 	
 	public Exercise() {
 		super();
-		exams = new ArrayList<Exam>();
 		questions = new ArrayList<Question>();
 	}
 
@@ -57,18 +58,18 @@ public class Exercise extends DomainEntity{
 
 	@Valid
 	@NotNull
-	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "exercises")
-	public Collection<Exam> getExams() {
-		return exams;
+	@ManyToOne(optional = false)
+	public Exam getExam() {
+		return exam;
 	}
 
-	public void setExams(Collection<Exam> exams) {
-		this.exams = exams;
+	public void setExam(Exam exam) {
+		this.exam = exam;
 	}
 
 	@Valid
 	@NotNull
-	@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.PERSIST)
+	@OneToMany(mappedBy = "exercise",cascade=CascadeType.ALL)
 	public Collection<Question> getQuestions() {
 		return questions;
 	}

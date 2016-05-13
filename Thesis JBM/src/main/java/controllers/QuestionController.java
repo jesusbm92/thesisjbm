@@ -85,7 +85,7 @@ public class QuestionController {
 
 		result = createListModelAndView(requestURI, questions, uri);
 
-		result.addObject("exam", exerciseService.findOne(exerciseId).getExams().iterator().next());
+		result.addObject("exam", exerciseService.findOne(exerciseId).getExam());
 		
 		return result;
 	}
@@ -141,15 +141,14 @@ public class QuestionController {
 			Exercise exercise = exerciseService.findOne(exerciseId);
 			BeanUtils.copyProperties(question, exParent);
 			question.setId(0);
-			Collection<Exercise> exercises = new ArrayList<Exercise>();
 			Collection<Metadata> metadatas = new ArrayList<Metadata>();
 			question.setAnswers(new ArrayList<Answer>());
 			metadatas.addAll(exParent.getMetadata());
 			question.setMetadata(metadatas);
-			exercises.addAll(exParent.getExercises());
-			exercises.add(exercise);
-			question.setExercises(exercises);
-			exercise.getQuestions().add(question);
+			question.setExercise(exercise);
+			if (userService.IAmAUser()) {
+				question.setOwner(userService.findByPrincipal());
+			}
 			Statistic statistic = new Statistic();
 			statistic.setQuestion(exParent);
 			statistic.setPercentage(exParent.getStatistic().getPercentage());
@@ -162,6 +161,9 @@ public class QuestionController {
 				ans.setId(0);
 				question.getAnswers().add(answerService.save(ans));
 			}
+			
+			question = questionService.save(question);
+			
 			// questions.addAll(exParent.getQuestions());
 			result = new ModelAndView("redirect:listByExercise.do?exerciseId="
 					+ exerciseId);
@@ -201,7 +203,7 @@ public class QuestionController {
 			RedirectAttributes redirect) {
 		ModelAndView result;
 
-		if (binding.hasErrors() && question.getStatistic() != null) {
+		if (binding.hasErrors() && question.getExercise()!=null && question.getStatistic() != null && question.getMetadata()!=null) {
 			if (question.getId() == 0) {
 				result = createCreateModelAndView(question,
 						"question.commit.error");
@@ -211,14 +213,20 @@ public class QuestionController {
 			}
 		} else {
 			try {
-				if (question.getExercises().size() == 0) {
+				if (question.getExercise() == null) {
 					Exercise exercise = exerciseService.findOne(exerciseId);
-					question.getExercises().add(exercise);
-					exercise.getQuestions().add(question);
+					question.setExercise(exercise);
 					Statistic s = new Statistic();
 					s.setQuestion(question);
 					question.setStatistic(s);
 					s.setPercentage(-1.0);
+				}
+				
+				if(question.getMetadata()==null){
+					question.setMetadata(new ArrayList<Metadata>());
+				}
+				if (userService.IAmAUser()) {
+					question.setOwner(userService.findByPrincipal());
 				}
 				question.setDifficulty(question.getStatistic().getPercentage().toString());
 				questionService.save(question);
@@ -321,8 +329,9 @@ public class QuestionController {
 		result = new ModelAndView(uri);
 		result.addObject("questions", questions);
 		result.addObject("requestURI", requestURI);
-		result.addObject("currentUser", userService.findByPrincipal());
-
+		if (userService.IAmAUser()) {
+			result.addObject("currentUser", userService.findByPrincipal());
+		}
 
 		return result;
 	}
