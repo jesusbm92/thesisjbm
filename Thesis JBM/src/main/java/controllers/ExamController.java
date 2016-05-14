@@ -22,6 +22,7 @@ import services.ExamService;
 import services.ExerciseService;
 import services.UserService;
 import utilities.FileToObjectsConverter;
+import domain.Answer;
 import domain.Exam;
 import domain.Exercise;
 import domain.Exam;
@@ -71,6 +72,70 @@ public class ExamController {
 
 		String uri = "exam/xml";
 		String requestURI = "exam/xml.do";
+
+		String xmlToExam = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<p:examen barajaEjercicios=\"false\" barajaPreguntas=\"false\" barajaRespuestas=\"true\" numEnunciados=\"9\" ordenEjercicios=\"10,3,5,ej1,2,4,6,7,8,9\" tipoNumeracionEjercicios=\"ordinal_literal\" tipoNumeracionPreguntas=\"decimal\" tipoNumeracionRespuestas=\"caracteres_minusculas\" xmlns:p=\"barajador_examen.modelo.jaxb.modeloexamen\" xmlns:xsi=\"ht//www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"barajador_examen.modelo.jaxb.modeloexamen modeloExamen.xsd \">\n <cabecera>\n <infoUniversidad>\n <nombre>Universidad Politécnica de Madrid</nombre>\n <siglas>UPM</siglas>\n </infoUniversidad>\n <infoFacultad>\n <nombre>Escuela Técnica Superior de Ingenieros Informáticos</nombre>\n <siglas>ETSIINF</siglas>\n </infoFacultad>\n <infoDepartamento>\n <nombre>Departamento de Lenguajes y Sistemas Informáticos e Ingeniería del Software</nombre>\n <siglas>DLSIIS</siglas>\n </infoDepartamento>\n <infoAsignatura>\n <nombre>Programación II</nombre>\n <tipo>Troncal</tipo>\n </infoAsignatura>\n <tipoExamen>Itinerario Flexible</tipoExamen>\n <fechaExamen>\n <fechaSeparadores tipo=\"separadores\">\n"
+				+ exam.getDate()
+				+ "</fechaSeparadores>\n </fechaExamen>\n <tituloExamen>\n <nombreUniversidad>false</nombreUniversidad>\n <nombreFacultad>false</nombreFacultad>\n <nombreDepartamento>true</nombreDepartamento>\n <siglasUniversidad>true</siglasUniversidad>\n <siglasFacultad>true</siglasFacultad>\n <siglasDepartamento>false</siglasDepartamento>\n </tituloExamen>\n <subtituloExamen>\n <nombreAsignatura>true</nombreAsignatura>\n <siglasAsignatura>false</siglasAsignatura>\n <tipoAsignatura>false</tipoAsignatura>\n<tipoExamen>true</tipoExamen>\n <fechaExamen>true</fechaExamen>\n </subtituloExamen>\n <textoCaratulaExamen>\n <prefacioDelExamen>\n <elemento nombreElemento=\"Realización\">\n<![CDATA[El test se realizará en la hoja de respuesta. Es \textbf{importante} que no olvidéis rellenar vuestros datos personales y el código clave de vuestro enunciado. Se pueden utilizar hojas aparte en sucio. ]]>\n </elemento>\n <elemento nombreElemento=\"Duración\"> </elemento>\n <elemento nombreElemento=\"Puntuación\"> </elemento>\n <elemento nombreElemento=\"Calificaciones\"> </elemento>\n <elemento nombreElemento=\"Revisión\"> </elemento>\n </prefacioDelExamen>\n </textoCaratulaExamen>\n </cabecera> \n<ejercicios>\n";
+
+		for (Exercise exercise : exam.getExercises()) {
+			xmlToExam = xmlToExam.concat("<ejercicio etiqueta=\""
+					+ exercise.getName() + "\"> <enunciado>\n<![CDATA["
+					+ exercise.getText() + "]]></enunciado>\n <preguntas>\n");
+			
+			for(Question question : exercise.getQuestions()){
+				
+				Boolean unique = false;
+				Integer i=0;
+				for(Answer a: question.getAnswers()){
+					if(a.getIsCorrect()){
+						i++;
+					}
+					if(i>1){
+						unique=true;
+					}
+				}
+				String textUniqueMultiple = "";
+				if(unique){
+					textUniqueMultiple="Multiple";
+				}
+				else{
+					textUniqueMultiple="Unica";
+				}
+				
+				String xmlToQuestion = " <pregunta peso=\""
+						+ question.getWeight()
+						+ "\" codigo=\""
+						+ question.getName()
+						+ "\">\n <texto>"
+						+ question.getText()
+						+ "\n</texto>\n<respuestas"+textUniqueMultiple+" numColumnas=\"1\" numSoluciones=\""+textUniqueMultiple.toLowerCase()+"\" pesoRespCorrecta=\""+question.getWeight()+"\" pesoRespIncorrecta=\""
+						+ question.getWeightfail() + "\">\n";
+				
+				for (Answer a : question.getAnswers()) {
+					xmlToQuestion = xmlToQuestion
+							.concat("<respuesta correcta=\""
+									+ a.getIsCorrect() + "\">\n<texto>"
+									+ a.getText() + "</texto>\n</respuesta>\n");
+					a.setQuestion(question);
+				}
+				// Concat XML endTags
+				xmlToQuestion = xmlToQuestion
+						.concat("</respuestas"+textUniqueMultiple+">\n</pregunta>\n");
+				
+				question.setXml(xmlToQuestion);
+				
+				xmlToExam = xmlToExam
+						.concat(xmlToQuestion);
+			}
+			
+			xmlToExam = xmlToExam
+					.concat("</preguntas>\n<metadatos></metadatos>\n</ejercicio>\n");
+			
+			
+		}
+		
+		exam.setXml(xmlToExam.concat(" </ejercicios>\n</p:examen>"));
+		examService.save(exam);
 
 		result = createXMLModelAndView(requestURI, exam, uri);
 

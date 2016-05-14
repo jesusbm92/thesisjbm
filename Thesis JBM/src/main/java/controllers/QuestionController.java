@@ -94,7 +94,47 @@ public class QuestionController {
 	public ModelAndView xml(@RequestParam int questionId) {
 		ModelAndView result;
 		Question question = questionService.findOne(questionId);
-
+		Boolean unique = false;
+		Integer i=0;
+		for(Answer a: question.getAnswers()){
+			if(a.getIsCorrect()){
+				i++;
+			}
+			if(i>1){
+				unique=true;
+			}
+		}
+		String textUniqueMultiple = "";
+		if(unique){
+			textUniqueMultiple="Multiple";
+		}
+		else{
+			textUniqueMultiple="Unica";
+		}
+		
+		String xmlToQuestion = " <pregunta peso=\""
+				+ question.getWeight()
+				+ "\" codigo=\""
+				+ question.getName()
+				+ "\">\n <texto>"
+				+ question.getText()
+				+ "\n</texto>\n<respuestas"+textUniqueMultiple+" numColumnas=\"1\" numSoluciones=\""+textUniqueMultiple.toLowerCase()+"\" pesoRespCorrecta=\""+question.getWeight()+"\" pesoRespIncorrecta=\""
+				+ question.getWeightfail() + "\">\n";
+		
+		for (Answer a : question.getAnswers()) {
+			xmlToQuestion = xmlToQuestion
+					.concat("<respuesta correcta=\""
+							+ a.getIsCorrect() + "\">\n<texto>"
+							+ a.getText() + "</texto>\n</respuesta>\n");
+			a.setQuestion(question);
+		}
+		// Concat XML endTags
+		xmlToQuestion = xmlToQuestion
+				.concat("</respuestas"+textUniqueMultiple+">\n</pregunta>\n");
+		
+		question.setXml(xmlToQuestion);
+		question = questionService.save(question);
+		
 		String uri = "question/xml";
 		String requestURI = "question/xml.do";
 
