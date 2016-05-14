@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -34,6 +35,9 @@ import domain.Exercise;
 import domain.Metadata;
 import domain.Question;
 import domain.Statistic;
+import domain.User;
+import forms.CustomerForm;
+import forms.FilterForm;
 
 @Controller
 @RequestMapping("/exercise")
@@ -89,6 +93,56 @@ public class ExerciseController {
 		return result;
 	}
 
+	@RequestMapping(value = "/search", method = RequestMethod.POST, params = "search")
+	public ModelAndView search(
+			@ModelAttribute("filterForm") @Valid FilterForm filterForm,
+			BindingResult binding, @RequestParam int examId) {
+
+		ModelAndView result;
+
+		if (binding.hasErrors()) {
+			result = createListModelAndView("exercise/listByExam.do",
+					new ArrayList<Exercise>(), "exercise/listByExam");
+
+		} else {
+				String filter = filterForm.getFilter();
+				String searchText = filterForm.getSearch();
+				Collection<Exercise> exercises = exerciseService.findAll();
+				Collection<Exercise> filtered = new ArrayList<Exercise>();
+				if (filter.equals("Metadata")) {
+					for (Exercise ex : exercises) {
+						for (Question q : ex.getQuestions()) {
+							for (Metadata m : q.getMetadata()) {
+								if (m.getName().toLowerCase()
+										.contains(searchText.toLowerCase())) {
+									filtered.add(ex);
+								}
+							}
+						}
+					}
+				} else if (filter.equals("Text")) {
+					for (Exercise ex : exercises) {
+						if(ex.getText().toLowerCase().contains(searchText.toLowerCase())){
+							filtered.add(ex);
+						}
+					}
+				} else if (filter.equals("Name")) {
+					for (Exercise ex : exercises) {
+						if(ex.getName().toLowerCase().contains(searchText.toLowerCase())){
+							filtered.add(ex);
+						}
+					}
+				}
+
+				result = createListModelAndView("exercise/allToPick.do",
+						filtered, "exercise/allToPick");
+				result.addObject("pickToCopy", true);
+				result.addObject("exam", examService.findOne(examId));
+		}
+
+		return result;
+	}
+
 	@RequestMapping(value = "/allToPick", method = RequestMethod.GET)
 	public ModelAndView alltopick(@RequestParam int examId) {
 		ModelAndView result;
@@ -100,7 +154,7 @@ public class ExerciseController {
 		result = createListModelAndView(requestURI, exercises, uri);
 		result.addObject("pickToCopy", true);
 		result.addObject("exam", examService.findOne(examId));
-
+		result.addObject("filterForm", new FilterForm());
 		return result;
 	}
 
@@ -161,7 +215,7 @@ public class ExerciseController {
 			exercise.setQuestions(questions);
 			exercise.setExam(exam);
 			exerciseService.save(exercise);
-//			qst = questionService.save(qst);
+			// qst = questionService.save(qst);
 			result = new ModelAndView("redirect:listByExam.do?examId=" + examId);
 		} catch (Throwable oops) {
 			if (exercise.getId() == 0) {
@@ -199,7 +253,7 @@ public class ExerciseController {
 			RedirectAttributes redirect) {
 		ModelAndView result;
 
-		if (binding.hasErrors() && exercise.getExam()!= null) {
+		if (binding.hasErrors() && exercise.getExam() != null) {
 			if (exercise.getId() == 0) {
 				result = createCreateModelAndView(exercise,
 						"exercise.commit.error");
@@ -209,7 +263,7 @@ public class ExerciseController {
 			}
 		} else {
 			try {
-				if (exercise.getExam()==null) {
+				if (exercise.getExam() == null) {
 					Exam exam = examService.findOne(examId);
 					exercise.setExam(exam);
 				}
