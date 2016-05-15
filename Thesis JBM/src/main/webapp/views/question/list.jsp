@@ -33,7 +33,8 @@
 						title='XML'><spring:message code="question.seexml" /></a>
 				</display:column>
 				<display:column titleKey="question.answers">
-					<a href="answer/listByQuestion.do?questionId=${row.id }"
+					<a href="javascript:void(0)"
+						onclick='javascript:window.open("answer/listByQuestion.do?questionId=${row.id }", "_blank", "scrollbars=1,resizable=1,height=500,width=900");'
 						title='Answers'><spring:message code="question.answers" /></a>
 				</display:column>
 				<display:column property="difficulty" titleKey="question.difficulty"
@@ -55,17 +56,17 @@
 					</jstl:forEach>
 				</display:column>
 
-						<display:column>
-				<jstl:if test="${row.owner != null}">
-				<jstl:if test="${row.owner.equals(currentUser) }">
+				<display:column>
+					<jstl:if test="${row.owner != null}">
+						<jstl:if test="${row.owner.equals(currentUser) }">
 							<a
 								href="question/edit.do?questionId=${row.id}&exerciseId=${param.exerciseId}"><input
 								class="btn btn-default" type="button"
 								value="<spring:message code="question.edit"/>"
 								onclick="self.location.href = question/edit.do?questionId=${row.id}&exerciseId=${param.exerciseId}" /></a>
+						</jstl:if>
 					</jstl:if>
-				</jstl:if>
-						</display:column>
+				</display:column>
 
 				<security:authorize access="hasRole('ADMIN')">
 					<display:column>
