@@ -77,6 +77,8 @@ public class FileToObjectsConverter {
 
 			System.out.println("Accessing Properties File...");
 
+			Path file;
+			if(args[0] != "controller"){
 			try {
 
 				input = FileToObjectsConverter.class.getClassLoader()
@@ -89,13 +91,22 @@ public class FileToObjectsConverter {
 				ex.printStackTrace();
 			}
 
-			Path file = Paths.get(prop.getProperty("pathToExam"));
+			file = Paths.get(prop.getProperty("pathToExam"));
+			}
+			else{
+				file = Paths.get(args[1]);
+			}
 			BasicFileAttributes attr = Files.readAttributes(file,
 					BasicFileAttributes.class);
 			Date creation = new Date(attr.creationTime().toMillis());
 
+			if(args[0] != "controller"){
 			br = new BufferedReader(new FileReader(
 					prop.getProperty("pathToExam")));
+			}
+			else{
+				br = new BufferedReader(new FileReader(args[1]));
+			}
 
 			Exam e = new Exam();
 			e.setName(file.getFileName().toString().replace(".tst", ""));
@@ -260,11 +271,18 @@ public class FileToObjectsConverter {
 					// databaseUtil.persist(exercise);
 					//
 					// databaseUtil.commitTransaction();
-
-					BufferedReader brStatistic = new BufferedReader(
+					BufferedReader brStatistic;
+					if(args[0] != "controller"){
+					brStatistic = new BufferedReader(
 							new FileReader(prop.getProperty("pathToExam")
 									.replace(".tst", ".sts")));
 
+					}
+					else{
+						brStatistic = new BufferedReader(
+								new FileReader(args[1]
+										.replace(".tst", ".sts")));
+					}
 					Statistic s = new Statistic();
 					while ((sCurrentLine = brStatistic.readLine()) != null) {
 						// We reached percentages

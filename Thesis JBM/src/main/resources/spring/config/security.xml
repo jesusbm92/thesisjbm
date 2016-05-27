@@ -60,6 +60,7 @@
 		
 		<security:intercept-url pattern="/register/**" access="permitAll" /> 
 		
+		<security:intercept-url pattern="/converter/**" access="hasRole('ADMIN')" /> 
 		
 	
 		<security:intercept-url pattern="/**" access="hasRole('NONE')" />

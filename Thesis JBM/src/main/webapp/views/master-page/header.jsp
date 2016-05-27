@@ -68,7 +68,8 @@
 			<security:authorize access="isAnonymous()">
 				<li class="dropdown"><a class="fNiv" href="security/login.do"><spring:message
 							code="master.page.login" /></a></li>
-				<li class="dropdown"><a class="fNiv" href="register/registerUser.do"><spring:message
+				<li class="dropdown"><a class="fNiv"
+					href="register/registerUser.do"><spring:message
 							code="master.page.register" /></a></li>
 			</security:authorize>
 
@@ -87,6 +88,11 @@
 			</security:authorize>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
+
+			<security:authorize access="hasRole('ADMIN')">
+				<li><a href="converter/select.do" title='Converter'><spring:message
+							code="master.page.converter" /></a></li>
+			</security:authorize>
 			<li class="dropdown"><a href="#" class="dropdown-toggle"
 				data-toggle="dropdown"><spring:message
 						code="master.page.language" /> <b class="caret"></b></a>

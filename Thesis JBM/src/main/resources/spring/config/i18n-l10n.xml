@@ -27,6 +27,7 @@
 		<value>/views/answer/messages</value>
 		<value>/views/metadata/messages</value>
 		<value>/views/register/messages</value>
+		<value>/views/converter/messages</value>
 
 	</util:list>
 
