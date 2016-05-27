@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.engine.FetchTiming;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -97,7 +98,7 @@ public class Exam extends DomainEntity {
 
 	@Valid
 	@NotNull
-	@OneToMany (mappedBy= "exam", cascade=CascadeType.ALL)
+	@OneToMany (fetch = FetchType.EAGER, mappedBy= "exam", cascade=CascadeType.ALL)
 	public Collection<Exercise> getExercises() {
 		return exercises;
 	}

@@ -80,7 +80,7 @@ public class ExerciseService {
 		Assert.notNull(exercise);
 
 		exercise.getExam().getExercises().remove(exercise);
-		exercise.setExam(null);
+//		exercise.setExam(null);
 
 		exerciseRepository.delete(exercise);
 
