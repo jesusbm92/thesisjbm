@@ -90,10 +90,10 @@ body {
 										</div>
 									</div>
 								</jstl:if>
-								<!-- 								<a href="exam/list.do"><input type="button" -->
-								<!-- 									class="btn btn-primary btn-lg" -->
-								<%-- 									value="<spring:message code="exam.cancel"/>" id="cancelar" --%>
-								<!-- 									name="cancelar" onclick="self.location.href = exam/list" /></a> -->
+								<a href="exam/list.do"><input type="button"
+									class="btn btn-primary btn-lg"
+									value="<spring:message code="exam.cancel"/>" id="cancelar"
+									name="cancelar" onclick="self.location.href = exam/list" /></a>
 							</div>
 						</div>
 					</fieldset>

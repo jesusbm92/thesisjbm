@@ -98,7 +98,7 @@ public class Exam extends DomainEntity {
 
 	@Valid
 	@NotNull
-	@OneToMany (fetch = FetchType.EAGER, mappedBy= "exam", cascade=CascadeType.ALL)
+	@OneToMany (mappedBy= "exam", cascade=CascadeType.ALL)
 	public Collection<Exercise> getExercises() {
 		return exercises;
 	}

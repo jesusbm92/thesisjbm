@@ -30,7 +30,7 @@
 								<spring:message code="converter.directory" />
 							</form:label>
 							<div class="col-md-6">
-								<form:input path="directory" id="directory" type="text" />
+								<form:input path="directory" id="directory" type="text" class="form-control" />
 							</div>
 							<form:errors path="directory" cssClass="error" />
 
@@ -40,7 +40,7 @@
 						<div class="form-group">
 							<div class="col-md-12 text-center">
 								<input type="submit" name="save" class="btn btn-primary btn-lg"
-									value="<spring:message code="metadata.save" />" />
+									value="<spring:message code="converter.save" />" />
 							</div>
 						</div>
 					</fieldset>

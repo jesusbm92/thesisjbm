@@ -69,7 +69,7 @@ public class Exercise extends DomainEntity{
 
 	@Valid
 	@NotNull
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "exercise",cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "exercise",cascade=CascadeType.ALL)
 	public Collection<Question> getQuestions() {
 		return questions;
 	}

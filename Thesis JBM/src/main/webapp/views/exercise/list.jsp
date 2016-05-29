@@ -43,7 +43,7 @@
 			<div class="form-group">
 				<div class="col-md-12 text-center">
 					<input type="submit" name="save" class="btn btn-primary btn-lg"
-						value="<spring:message code="exercise.save" />" />
+						value="<spring:message code="exercise.search" />" />
 				</div>
 			</div>
 		</fieldset>

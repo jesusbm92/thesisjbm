@@ -44,14 +44,16 @@ import domain.Statistic;
 
 public class FileToObjectsConverter {
 
-//	public static String prettyFormat(String input) {
-//		
-//	}
-
+	// public static String prettyFormat(String input) {
+	//
+	// }
 
 	public static void main(String[] args) {
 		CopyOfDatabaseUtil databaseUtil;
-
+		if (args.length<1) {
+			args = new String[3];
+			args[0] = "";
+		}
 		List<Answer> orderedAnswers = new ArrayList<Answer>();
 		databaseUtil = null;
 
@@ -78,33 +80,31 @@ public class FileToObjectsConverter {
 			System.out.println("Accessing Properties File...");
 
 			Path file;
-			if(args[0] != "controller"){
-			try {
+			if (args[0] != "controller") {
+				try {
 
-				input = FileToObjectsConverter.class.getClassLoader()
-						.getResourceAsStream("config.properties");
+					input = FileToObjectsConverter.class.getClassLoader()
+							.getResourceAsStream("config.properties");
 
-				// load a properties file
-				prop.load(input);
+					// load a properties file
+					prop.load(input);
 
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
 
-			file = Paths.get(prop.getProperty("pathToExam"));
-			}
-			else{
+				file = Paths.get(prop.getProperty("pathToExam"));
+			} else {
 				file = Paths.get(args[1]);
 			}
 			BasicFileAttributes attr = Files.readAttributes(file,
 					BasicFileAttributes.class);
 			Date creation = new Date(attr.creationTime().toMillis());
 
-			if(args[0] != "controller"){
-			br = new BufferedReader(new FileReader(
-					prop.getProperty("pathToExam")));
-			}
-			else{
+			if (args[0] != "controller") {
+				br = new BufferedReader(new FileReader(
+						prop.getProperty("pathToExam")));
+			} else {
 				br = new BufferedReader(new FileReader(args[1]));
 			}
 
@@ -170,9 +170,8 @@ public class FileToObjectsConverter {
 							sCurrentLine.indexOf("<") - 1));
 
 					// Skipping the ENUNCIADO_TF line
-						sCurrentLine = br.readLine();
+					sCurrentLine = br.readLine();
 
-					
 					Boolean textQuestionFinish = false;
 					question.setWeight(currentWeight);
 					question.setText("");
@@ -210,37 +209,41 @@ public class FileToObjectsConverter {
 								Integer indexStart = m.start();
 								copy = copy.substring(indexStart);
 								// System.out.println(copy);
-								if(copy.contains("TRUE")||copy.contains("FALSE")){
-								String[] splitted = copy.split("\\s+");
-								a.setText("");
-								for (int i = 0; i < splitted.length; i++) {
-									if (i == 0) {
-										a.setName(splitted[i]);
-									} else if (i == 1) {
-										if (splitted[i].toLowerCase().equals(
-												"true")) {
-											a.setIsCorrect(true);
-										} else if (splitted[i].toLowerCase()
-												.equals("false")) {
-											a.setIsCorrect(false);
+								if (copy.contains("TRUE")
+										|| copy.contains("FALSE")) {
+									String[] splitted = copy.split("\\s+");
+									a.setText("");
+									for (int i = 0; i < splitted.length; i++) {
+										if (i == 0) {
+											a.setName(splitted[i]);
+										} else if (i == 1) {
+											if (splitted[i].toLowerCase()
+													.equals("true")) {
+												a.setIsCorrect(true);
+											} else if (splitted[i]
+													.toLowerCase().equals(
+															"false")) {
+												a.setIsCorrect(false);
+											}
+										} else if (i == 2) {
+											a.setText(a.getText() + splitted[i]);
+										} else {
+											a.setText(a.getText() + " "
+													+ splitted[i]);
 										}
-									} else if (i == 2) {
-										a.setText(a.getText() + splitted[i]);
-									} else {
-										a.setText(a.getText() + " "
-												+ splitted[i]);
 									}
+									// Setting the penalty to 0.0 because no
+									// info
+									// about penalty is given in the tsts
+									a.setPenalty(0.0);
+									answers.add(a);
+									orderedAnswers.add(a);
 								}
-								// Setting the penalty to 0.0 because no info
-								// about penalty is given in the tsts
-								a.setPenalty(0.0);
-								answers.add(a);
-								orderedAnswers.add(a);
-								}
-								
-								else{
-									Answer aux = orderedAnswers.get(orderedAnswers.size()-1);
-									aux.setText(aux.getText()+ " "+copy);
+
+								else {
+									Answer aux = orderedAnswers
+											.get(orderedAnswers.size() - 1);
+									aux.setText(aux.getText() + " " + copy);
 								}
 
 							}
@@ -272,16 +275,14 @@ public class FileToObjectsConverter {
 					//
 					// databaseUtil.commitTransaction();
 					BufferedReader brStatistic;
-					if(args[0] != "controller"){
-					brStatistic = new BufferedReader(
-							new FileReader(prop.getProperty("pathToExam")
-									.replace(".tst", ".sts")));
+					if (args[0] != "controller") {
+						brStatistic = new BufferedReader(new FileReader(prop
+								.getProperty("pathToExam").replace(".tst",
+										".sts")));
 
-					}
-					else{
-						brStatistic = new BufferedReader(
-								new FileReader(args[1]
-										.replace(".tst", ".sts")));
+					} else {
+						brStatistic = new BufferedReader(new FileReader(
+								args[1].replace(".tst", ".sts")));
 					}
 					Statistic s = new Statistic();
 					while ((sCurrentLine = brStatistic.readLine()) != null) {
@@ -369,27 +370,29 @@ public class FileToObjectsConverter {
 
 					finalDif = finalDif / count;
 					e.setDifficulty(String.valueOf(finalDif));
-					
-					//COMMENT / UNCOMMENT TO GENERATE TEST METADATAS
-//					Collection<Metadata> metadatas = new ArrayList<Metadata>();
-//					Metadata m1 = new Metadata();
-//					Metadata m2 = new Metadata();
-//					m1.setName("MetadataTest1");
-//					m2.setName("MetadataTest2");
-//					metadatas.add(m1);
-//					metadatas.add(m2);
-//					Collection<Question> qsts = new ArrayList<Question>();
-//					qsts.add(question);
-//					m1.setQuestions(qsts);
-//					m2.setQuestions(qsts);
-//					question.setMetadata(metadatas);
-					//COMMENT
-					
+
+					// COMMENT / UNCOMMENT TO GENERATE TEST METADATAS
+					// Collection<Metadata> metadatas = new
+					// ArrayList<Metadata>();
+					// Metadata m1 = new Metadata();
+					// Metadata m2 = new Metadata();
+					// m1.setName("MetadataTest1");
+					// m2.setName("MetadataTest2");
+					// metadatas.add(m1);
+					// metadatas.add(m2);
+					// Collection<Question> qsts = new ArrayList<Question>();
+					// qsts.add(question);
+					// m1.setQuestions(qsts);
+					// m2.setQuestions(qsts);
+					// question.setMetadata(metadatas);
+					// COMMENT
+
 					for (Answer a : answers) {
 						xmlToQuestion = xmlToQuestion
 								.concat("<respuesta correcta=\""
 										+ a.getIsCorrect() + "\">\n<texto>"
-										+ a.getText() + "</texto>\n</respuesta>\n");
+										+ a.getText()
+										+ "</texto>\n</respuesta>\n");
 						a.setQuestion(question);
 					}
 					// Concat XML endTags
@@ -407,10 +410,10 @@ public class FileToObjectsConverter {
 					e.setXml(xmlToExam);
 					// DATABASE INSERT
 					databaseUtil.openTransaction();
-					//COMMENT / UNCOMMENT TO GENERATE TEST METADATAS
-//					for (Metadata m : metadatas) {
-//						databaseUtil.persist(m);
-//					}
+					// COMMENT / UNCOMMENT TO GENERATE TEST METADATAS
+					// for (Metadata m : metadatas) {
+					// databaseUtil.persist(m);
+					// }
 					databaseUtil.persist(e);
 					databaseUtil.persist(exercise);
 					databaseUtil.persist(question);
