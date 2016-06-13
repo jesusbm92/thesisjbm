@@ -45,17 +45,17 @@ public class FileToObjectController {
 
 		if (binding.hasErrors()) {
 
-				result = createCreateModelAndView(fileform, "exam.commit.error");
+				result = createCreateModelAndView(fileform, "metadata.commit.error");
 			
 		} else {
 			try {
 				String [] array = {"controller", fileform.getDirectory()};
 				FileToObjectsConverter.main(array);
-				redirect.addFlashAttribute("successMessage", "metadata.deleteSuccess");
+				redirect.addFlashAttribute("successMessage", "converter.deleteSuccess");
 				result = new ModelAndView("redirect:select.do");
 			} catch (Throwable oops) {
 				
-					result = createCreateModelAndView(fileform, "exam.commit.error");
+					result = createCreateModelAndView(fileform, "metadata.commit.error");
 				
 
 			}

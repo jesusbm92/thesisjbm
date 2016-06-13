@@ -93,7 +93,7 @@ public class CreateEditDeleteExamTest extends GlobalTest {
 
 		int sizeBefore = examService.findAll().size();
 
-		Exam exam = examService.findOne(163841);
+		Exam exam = examService.findOne(98304);
 		examService.delete(exam);
 
 		int sizeAfter = examService.findAll().size();

@@ -18,6 +18,9 @@ import repositories.QuestionRepository;
 @Transactional
 @Service
 public class QuestionService {
+	
+	 @Autowired
+	 private ExamService examService;
 
 	// Managed repository-----------------------
 
@@ -68,6 +71,7 @@ public class QuestionService {
 	 */
 	public Question save(Question question) {
 
+		
 		return questionRepository.save(question);
 	}
 

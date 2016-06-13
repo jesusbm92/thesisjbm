@@ -1,5 +1,6 @@
 package controllers;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -60,6 +61,23 @@ public class ExamController {
 		String uri = "exam/list";
 		String requestURI = "exam/list.do";
 		Collection<Exam> exams = examService.findAll();
+		for (Exam exam : exams) {
+			Integer nquestion = 0;
+			Double difficulty = 0.0;
+			for (Exercise e : exam.getExercises()) {
+				for (Question q : e.getQuestions()) {
+					if (q.getStatistic().getPercentage() > -1.0) {
+						nquestion++;
+						difficulty = difficulty
+								+ Double.valueOf(q.getDifficulty());
+					}
+				}
+			}
+			difficulty = difficulty / nquestion;
+			DecimalFormat df2 = new DecimalFormat(".##");
+			exam.setDifficulty(df2.format(difficulty));
+			examService.save(exam);
+		}
 		result = createListModelAndView(requestURI, exams, uri);
 
 		return result;
@@ -81,59 +99,58 @@ public class ExamController {
 			xmlToExam = xmlToExam.concat("<ejercicio etiqueta=\""
 					+ exercise.getName() + "\"> <enunciado>\n<![CDATA["
 					+ exercise.getText() + "]]></enunciado>\n <preguntas>\n");
-			
-			for(Question question : exercise.getQuestions()){
-				
+
+			for (Question question : exercise.getQuestions()) {
+
 				Boolean unique = false;
-				Integer i=0;
-				for(Answer a: question.getAnswers()){
-					if(a.getIsCorrect()){
+				Integer i = 0;
+				for (Answer a : question.getAnswers()) {
+					if (a.getIsCorrect()) {
 						i++;
 					}
-					if(i>1){
-						unique=true;
+					if (i > 1) {
+						unique = true;
 					}
 				}
 				String textUniqueMultiple = "";
-				if(unique){
-					textUniqueMultiple="Multiple";
+				if (unique) {
+					textUniqueMultiple = "Multiple";
+				} else {
+					textUniqueMultiple = "Unica";
 				}
-				else{
-					textUniqueMultiple="Unica";
-				}
-				
+
 				String xmlToQuestion = " <pregunta peso=\""
-						+ question.getWeight()
-						+ "\" codigo=\""
-						+ question.getName()
-						+ "\">\n <texto>"
-						+ question.getText()
-						+ "\n</texto>\n<respuestas"+textUniqueMultiple+" numColumnas=\"1\" numSoluciones=\""+textUniqueMultiple.toLowerCase()+"\" pesoRespCorrecta=\""+question.getWeight()+"\" pesoRespIncorrecta=\""
-						+ question.getWeightfail() + "\">\n";
-				
+						+ question.getWeight() + "\" codigo=\""
+						+ question.getName() + "\">\n <texto>"
+						+ question.getText() + "\n</texto>\n<respuestas"
+						+ textUniqueMultiple
+						+ " numColumnas=\"1\" numSoluciones=\""
+						+ textUniqueMultiple.toLowerCase()
+						+ "\" pesoRespCorrecta=\"" + question.getWeight()
+						+ "\" pesoRespIncorrecta=\"" + question.getWeightfail()
+						+ "\">\n";
+
 				for (Answer a : question.getAnswers()) {
 					xmlToQuestion = xmlToQuestion
-							.concat("<respuesta correcta=\""
-									+ a.getIsCorrect() + "\">\n<texto>"
-									+ a.getText() + "</texto>\n</respuesta>\n");
+							.concat("<respuesta correcta=\"" + a.getIsCorrect()
+									+ "\">\n<texto>" + a.getText()
+									+ "</texto>\n</respuesta>\n");
 					a.setQuestion(question);
 				}
 				// Concat XML endTags
-				xmlToQuestion = xmlToQuestion
-						.concat("</respuestas"+textUniqueMultiple+">\n</pregunta>\n");
-				
+				xmlToQuestion = xmlToQuestion.concat("</respuestas"
+						+ textUniqueMultiple + ">\n</pregunta>\n");
+
 				question.setXml(xmlToQuestion);
-				
-				xmlToExam = xmlToExam
-						.concat(xmlToQuestion);
+
+				xmlToExam = xmlToExam.concat(xmlToQuestion);
 			}
-			
+
 			xmlToExam = xmlToExam
 					.concat("</preguntas>\n<metadatos></metadatos>\n</ejercicio>\n");
-			
-			
+
 		}
-		
+
 		exam.setXml(xmlToExam.concat(" </ejercicios>\n</p:examen>"));
 		examService.save(exam);
 

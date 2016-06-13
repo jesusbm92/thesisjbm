@@ -201,6 +201,7 @@ public class ExerciseController {
 				}
 				Collection<Metadata> metadatas = new ArrayList<Metadata>();
 				metadatas.addAll(q.getMetadata());
+				qst.setMetadata(metadatas);
 				qst.setExercise(exercise);
 				questions.add(qst);
 				for (Answer a : q.getAnswers()) {
